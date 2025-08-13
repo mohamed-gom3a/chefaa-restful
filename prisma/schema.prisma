@@ -7,18 +7,387 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model Subscription {
+  id             Int          @id @default(autoincrement())
+  intervalType   IntervalType
+  nextRefillDate DateTime
+  lastRefillDate DateTime?
+  endDate        DateTime?
+  isActive       Boolean?
+  createdAt      DateTime     @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+  @@index([isActive, createdAt])
+  @@index([nextRefillDate])
+}
+
+model Offer {
+  id           Int        @id @default(autoincrement())
+  amount       Decimal    @db.Decimal(10, 2)
+  amountType   AmountType
+  position     Int
+  active       Boolean    @default(true)
+  validFrom    DateTime
+  validUntil   DateTime?
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  medicationId Int
+
+  @@index([medicationId])
+  @@index([active, validFrom, validUntil])
+  @@index([position])
+}
+
+model Notification {
+  /// Unique identifier of notification
+  id               String            @id @default(uuid())
+  message          String
+  isImportant      Boolean
+  notificationType NotificationType?
+  createdAt        DateTime          @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+  @@index([isImportant, createdAt])
+  @@index([notificationType, createdAt])
+}
+
+model Address {
+  id          Int         @id @default(autoincrement())
+  city        String
+  streetName  String
+  buildingNo  String?
+  floor       String?
+  apartment   String?
+  landmark    String?
+  lat         Float?
+  lng         Float?
+  addressType AddressType @default(HOME)
+  isDefault   Boolean     @default(false)
+  createdAt   DateTime    @default(now())
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId      String
+
+  @@index([userId])
+  @@index([addressType, isDefault])
+  @@index([city])
+  @@index([lat, lng])
+}
+
+model CreditCard {
+  id          Int      @id @default(autoincrement())
+  last4       String   @db.VarChar(4)
+  expiryMonth Int
+  expiryYear  Int
+  token       String // from payment gateway
+  createdAt   DateTime @default(now())
+
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+
+  @@index([userId])
+  @@index([expiryYear, expiryMonth])
+}
+
+model Coupon {
+  id               String     @id @default(uuid())
+  code             String     @unique
+  description      String
+  amount           Decimal    @db.Decimal(10, 2)
+  minOrderValue    Decimal    @db.Decimal(10, 2)
+  maxDiscountValue Decimal?   @db.Decimal(10, 2)
+  amountType       AmountType @default(FIXED)
+  usageLimit       Int?
+  usedCount        Int        @default(0)
+  isActive         Boolean    @default(true)
+  validFrom        DateTime
+  validUntil       DateTime
+  createdBy        String
+  createdAt        DateTime   @default(now())
+  updatedAt        DateTime   @updatedAt
+
+  orders Order[]
+
+  @@index([isActive, validFrom, validUntil])
+  @@index([amountType, isActive])
+  @@index([createdBy, createdAt])
+}
+
+model Payment {
+  id            String   @id @default(uuid())
+  amount        Decimal  @db.Decimal(10, 2)
+  method        String
+  transactionId String
+  paidAt        DateTime
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId       String   @unique
+
+  @@index([method, paidAt])
+  @@index([transactionId])
+}
+
+model Order {
+  id                String            @id @default(uuid())
+  orderStatus       OrderStatus       @default(PENDING)
+  subtotalPrice     Decimal           @default(0) @db.Decimal(10, 2)
+  totalPrice        Decimal           @default(0) @db.Decimal(10, 2)
+  discountAmount    Decimal           @default(0) @db.Decimal(10, 2)
+  orderNote         String?
+  contactPreference ContactPreference @default(PHONE)
+  conflictSolution  ConflictSolution  @default(REPLACE)
+  paymentMethod     PaymentMethod     @default(CASH_ON_DELIVERY)
+  paymentName       String?
+  createdAt         DateTime          @default(now())
+  updatedAt         DateTime          @updatedAt
+
+  delivery Delivery?
+  pickup   Pickup?
+  payment  Payment?
+  coupon   Coupon?     @relation(fields: [couponId], references: [id], onDelete: SetNull)
+  couponId String?
+  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId   String
+  items    OrderItem[]
+
+  @@index([userId, orderStatus])
+  @@index([createdAt, orderStatus])
+  @@index([couponId])
+  @@index([paymentMethod, orderStatus])
+  @@index([contactPreference])
+}
+
+model OrderItem {
+  id       String  @id @default(uuid())
+  price    Decimal @db.Decimal(10, 2)
+  quantity Int
+
+  discountAmount Decimal @default(0) @db.Decimal(10, 2)
+
+  order        Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId      String
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  medicationId Int
+
+  @@index([orderId])
+  @@index([medicationId])
+  @@index([orderId, medicationId])
+}
+
+model Delivery {
+  id               String          @id @default(uuid())
+  deliveryStatus   DeliveryStatus?
+  trackingNumber   String?
+  deliveryAddress  String?
+  deliveryLat      Float?
+  deliveryLng      Float?
+  outAt            DateTime?
+  estimatedAt      DateTime?
+  completedAt      DateTime?
+  deliveryOption   DeliveryOption? @relation(fields: [deliveryOptionId], references: [id], onDelete: SetNull)
+  deliveryOptionId Int?
+  order            Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId          String          @unique
+
+  @@index([deliveryStatus, estimatedAt])
+  @@index([deliveryOptionId])
+  @@index([trackingNumber])
+  @@index([completedAt])
+  @@index([deliveryLat, deliveryLng])
+}
+
+model Pickup {
+  id              String       @id @default(uuid())
+  pickupStatus    PickupStatus @default(PENDING)
+  pharmacyAddress String?
+  pharmacyLat     Float?
+  pharmacyLng     Float?
+
+  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  orderId String @unique
+
+  @@index([pickupStatus])
+  @@index([pharmacyLat, pharmacyLng])
+}
+
+model DeliveryOption {
+  id                 Int        @id @default(autoincrement())
+  optionName         String
+  optionType         String
+  deliveryTimeHours  Int
+  deliveryFee        Decimal    @db.Decimal(10, 2)
+  discountPercentage Decimal?   @db.Decimal(5, 2)
+  minimumOrderAmount Decimal?   @db.Decimal(10, 2)
+  isActive           Boolean    @default(true)
+  isAvailable        Boolean    @default(true)
+  isFreeDelivery     Boolean?
+  createdAt          DateTime   @default(now())
+  updatedAt          DateTime   @updatedAt
+  Delivery           Delivery[]
+
+  @@index([isActive, isAvailable])
+  @@index([optionType, isActive])
+  @@index([deliveryTimeHours])
+}
+
+model Cart {
+  id         String     @id @default(uuid())
+  totalPrice Decimal    @default(0) @db.Decimal(10, 2)
+  cartStatus CartStatus @default(ACTIVE)
+  createdAt  DateTime   @default(now())
+  updatedAt  DateTime   @updatedAt
+
+  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId String
+  items  CartItem[]
+
+  @@index([userId, cartStatus])
+  @@index([createdAt])
+}
+
+model CartItem {
+  id       String  @id @default(uuid())
+  price    Decimal @db.Decimal(10, 2)
+  quantity Int
+
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  medicationId Int
+  cart         Cart       @relation(fields: [cartId], references: [id])
+  cartId       String
+
+  @@index([cartId])
+  @@index([medicationId])
+  @@index([cartId, medicationId])
+}
+
+model Medication {
+  id           Int       @id @default(autoincrement())
+  name         String    @unique
+  description  String?
+  price        Decimal   @db.Decimal(10, 2)
+  stock        Int       @default(0)
+  createdAt    DateTime  @default(now())
+  updatedAt    DateTime  @updatedAt
+  sellingCount Int       @default(0)
+  image        String?
+  category     Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  categoryId   Int?
+  bundle       Bundle?   @relation(fields: [bundleId], references: [id], onDelete: SetNull)
+  bundleId     Int?
+
+  cartItems     CartItem[]
+  orderItems    OrderItem[]
+  wishlistItems WishlistItem[]
+  prescriptions Prescription[]
+  Offer         Offer[]
+
+  @@index([categoryId])
+  @@index([bundleId])
+  @@index([stock])
+  @@index([price, stock])
+  @@index([sellingCount, createdAt])
+  @@index([categoryId, stock])
+}
+
+model Bundle {
+  id          Int     @id @default(autoincrement())
+  name        String  @unique
+  description String?
+
+  medications Medication[]
+}
+
+model Category {
+  id              Int           @id @default(autoincrement())
+  name            String        @unique
+  image           String?
+  superCategory   SuperCategory @relation(fields: [superCategoryId], references: [id], onDelete: Cascade)
+  superCategoryId Int
+
+  medications Medication[]
+
+  @@index([superCategoryId])
+}
+
+model SuperCategory {
+  id    Int     @id @default(autoincrement())
+  name  String  @unique
+  image String?
+
+  categories Category[]
+}
+
+model WishlistItem {
+  id        String   @id @default(uuid())
+  createdAt DateTime @default(now())
+
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  medicationId Int
+
+  @@unique([userId, medicationId])
+  @@index([userId])
+  @@index([medicationId])
+  @@index([createdAt])
+}
+
+model Prescription {
+  id          String   @id @default(uuid())
+  description String?
+  createdAt   DateTime @default(now())
+  validUntil  DateTime @default(dbgenerated("now() + interval '12 hours'"))
+
+  images       Image[]
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  medicationId Int
+
+  @@index([medicationId])
+  @@index([createdAt, validUntil])
+}
+
+model Image {
+  id        String   @id @default(uuid())
+  url       String
+  createdAt DateTime @default(now())
+
+  prescription   Prescription? @relation(fields: [prescriptionId], references: [id], onDelete: SetNull)
+  prescriptionId String?
+
+  @@index([prescriptionId])
+  @@index([createdAt])
+}
+
 model User {
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
   name      String?
   address   String?
+  phone     Int?
+  gender    Gender?
+  country   Country? @default(EG)
   role      Role     @default(USER)
   createdAt DateTime @default(now())
-  updatedAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
 
-  Purchase   Purchase[]
-  UserTokens UserTokens[]
+  Purchase      Purchase[]
+  UserTokens    UserTokens[]
+  orders        Order[]
+  carts         Cart[]
+  wishlistItems WishlistItem[]
+  creditCards   CreditCard[]
+  Address       Address[]
+  Notification  Notification[]
+
+  @@index([email])
+  @@index([role, country])
+  @@index([gender])
+  @@index([createdAt])
+  Subscription Subscription[]
 }
 
 model UserTokens {
@@ -32,23 +401,32 @@ model UserTokens {
   browserInfo  String?
   expiresAt    DateTime
   createdAt    DateTime @default(now())
+
+  @@index([userId])
+  @@index([expiresAt])
+  @@index([family])
+  @@index([userId, expiresAt])
 }
 
 model Product {
-  id                 String     @id @default(uuid())
-  name               String     @unique
-  urlName            String     @unique
+  id                 String        @id @default(uuid())
+  name               String        @unique
+  urlName            String        @unique
   picture            String?
-  basePrice          Decimal
-  discountPercentage Int        @default(0)
-  stock              Int        @default(0)
+  basePrice          Decimal       @db.Decimal(10, 2)
+  discountPercentage Int           @default(0)
+  stock              Int           @default(0)
   description        String?
-  createdAt          DateTime   @default(now())
-  categories         Category[]
+  createdAt          DateTime      @default(now())
+  categories         OldCategory[]
   Purchase           Purchase[]
+
+  @@index([basePrice, stock])
+  @@index([discountPercentage, stock])
+  @@index([createdAt])
 }
 
-model Category {
+model OldCategory {
   id       String    @id @default(uuid())
   name     String    @unique
   products Product[]
@@ -64,13 +442,102 @@ model Purchase {
   productId String
 
   amount        Int      @default(1)
-  totalPrice    Decimal
+  totalPrice    Decimal  @db.Decimal(10, 2)
   reviewNote    Int?
   reviewComment String?
   createdAt     DateTime @default(now())
+
+  @@index([userId])
+  @@index([productId])
+  @@index([reviewNote])
+  @@index([userId, productId])
+  @@index([productId, createdAt])
 }
 
 enum Role {
   USER
+  PHARMACIST
   ADMIN
+}
+
+enum Gender {
+  MALE
+  FEMALE
+}
+
+enum Country {
+  EG
+  SA
+}
+
+enum CartStatus {
+  IDLE
+  ACTIVE
+  ABANDONED
+}
+
+enum OrderStatus {
+  PENDING
+  DONE
+  CANCELLED
+}
+
+enum DeliveryStatus {
+  PROCESSING
+  SHIPPED
+  DELIVERED
+}
+
+enum PickupStatus {
+  PENDING
+  READY
+  COMPLETED
+  CANCELLED
+}
+
+enum ContactPreference {
+  PHONE
+  EMAIL
+  SMS
+  WHATSAPP
+}
+
+enum ConflictSolution {
+  REPLACE
+  REFUND
+  CONTACT_CUSTOMER
+  PARTIAL_REFUND
+}
+
+enum PaymentMethod {
+  CASH_ON_DELIVERY
+  CREDIT_CARD
+  DEBIT_CARD
+  BANK_TRANSFER
+  DIGITAL_WALLET
+  PHARMACY_PAYMENT
+}
+
+enum AmountType {
+  PERCENTAGE
+  FIXED
+}
+
+enum AddressType {
+  HOME
+  WORK
+  PHARMACY
+}
+
+enum NotificationType {
+  ORDER_UPDATE
+  PROMOTION
+  REMINDER
+}
+
+enum IntervalType {
+  DAILY
+  WEEKLY
+  MONTHLY
+  YEARLY
 }
