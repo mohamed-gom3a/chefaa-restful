@@ -53,7 +53,7 @@ export class CategoryService {
   /** Find category by ID and show the products that have this category */
   async findOneById(
     id: string,
-    { productName = '', page = 1, offset = 10 }: FindProductsDto,
+    { productName = '', page = 1, offset = 10 }: FindProductsDto
   ): Promise<Category> {
     const productsToSkip = (page - 1) * offset;
 
@@ -76,7 +76,7 @@ export class CategoryService {
   /** Find category by name and show the products that have this category */
   async findOneByName(
     name: string,
-    { productName = '', page = 1, offset = 10 }: FindProductsDto,
+    { productName = '', page = 1, offset = 10 }: FindProductsDto
   ): Promise<Category> {
     const productsToSkip = (page - 1) * offset;
 
@@ -101,7 +101,7 @@ export class CategoryService {
   /** Updates category information */
   async update(
     id: string,
-    updateCategoryDto: UpdateCategoryDto,
+    updateCategoryDto: UpdateCategoryDto
   ): Promise<Category> {
     if (updateCategoryDto.name) {
       return this.updateCategoryAndName(id, updateCategoryDto);
@@ -131,7 +131,7 @@ export class CategoryService {
    */
   private updateCategoryAndName(
     id: string,
-    updateCategoryDto: UpdateCategoryDto,
+    updateCategoryDto: UpdateCategoryDto
   ): Promise<Category> {
     const name = this.capitalizeOnlyFirstLetter(updateCategoryDto.name);
 
