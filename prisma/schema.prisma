@@ -4,14 +4,15 @@ generator client {
 
 generator nestjsDto {
   provider                        = "prisma-generator-nestjs-dto"
-  output                          = "../src/generated/nestjs-dto"
+  output                          = "../src/generated"
   classValidation                 = "true"
   createDtoPrefix                 = "Create"
   updateDtoPrefix                 = "Update"
   dtoSuffix                       = "Dto"
   outputType                      = "class"
   requiredResponseApiProperty     = "true"
-  typeMapping                     = "Decimal=string"
+  outputToNestJsResourceStructure = "true"
+  flatResourceStructure           = "false"
 }
 
 datasource db {
