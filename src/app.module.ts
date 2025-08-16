@@ -8,6 +8,8 @@ import { PrismaModule } from './prisma/prisma.module';
 
 import { PurchaseModule } from './models/purchase/purchase.module';
 import { MedicationModule } from './medication/medication.module';
+import { CategoryModule } from './category/category.module';
+import { CateogyrService } from './cateogyr/cateogyr.service';
 
 @Module({
   imports: [
@@ -17,12 +19,14 @@ import { MedicationModule } from './medication/medication.module';
     ProductModule,
     PurchaseModule,
     MedicationModule,
+    CategoryModule,
   ],
   providers: [
     {
       provide: APP_GUARD,
       useClass: AccessJwtAuthGuard,
     },
+    CateogyrService,
   ],
 })
 export class AppModule {}
