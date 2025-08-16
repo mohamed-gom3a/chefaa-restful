@@ -1,0 +1,40 @@
+
+import {ApiProperty} from '@nestjs/swagger'
+import {Image} from './image.entity'
+import {Medication} from './medication.entity'
+
+
+export class Prescription {
+  @ApiProperty()
+id: string ;
+@ApiProperty({
+  nullable: true,
+})
+description: string  | null;
+@ApiProperty({
+  type: 'string',
+  format: 'date-time',
+})
+createdAt: Date ;
+@ApiProperty({
+  type: 'string',
+  format: 'date-time',
+})
+validUntil: Date ;
+@ApiProperty({
+  type: () => Image,
+  isArray: true,
+  required: false,
+})
+images?: Image[] ;
+@ApiProperty({
+  type: () => Medication,
+  required: false,
+})
+medication?: Medication ;
+@ApiProperty({
+  type: 'integer',
+  format: 'int32',
+})
+medicationId: number ;
+}

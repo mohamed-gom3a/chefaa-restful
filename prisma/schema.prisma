@@ -2,6 +2,18 @@ generator client {
   provider = "prisma-client-js"
 }
 
+generator nestjsDto {
+  provider                        = "prisma-generator-nestjs-dto"
+  output                          = "../src/generated/nestjs-dto"
+  classValidation                 = "true"
+  createDtoPrefix                 = "Create"
+  updateDtoPrefix                 = "Update"
+  dtoSuffix                       = "Dto"
+  outputType                      = "class"
+  requiredResponseApiProperty     = "true"
+  typeMapping                     = "Decimal=string"
+}
+
 datasource db {
   provider = "postgresql"
   url      = env("DATABASE_URL")
@@ -265,7 +277,8 @@ model CartItem {
 
 model Medication {
   id           Int       @id @default(autoincrement())
-  name         String    @unique
+  name         String
+  urlName      String?   @unique
   description  String?
   price        Decimal   @db.Decimal(10, 2)
   stock        Int       @default(0)
@@ -383,11 +396,11 @@ model User {
   Address       Address[]
   Notification  Notification[]
 
+  Subscription Subscription[]
   @@index([email])
   @@index([role, country])
   @@index([gender])
   @@index([createdAt])
-  Subscription Subscription[]
 }
 
 model UserTokens {

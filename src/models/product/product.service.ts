@@ -23,13 +23,15 @@ export class ProductService {
   async create(createProductDto: CreateProductDto): Promise<Product> {
     const urlName = this.formatUrlName(createProductDto.name);
 
-    const categories = this.connectCategoriesById(createProductDto.categories);
+    const oldCategories = this.connectCategoriesById(
+      createProductDto.categories,
+    );
 
     const product = await this.prisma.product.create({
       data: {
         ...createProductDto,
         urlName,
-        categories,
+        categories: oldCategories,
       },
       include: { categories: { select: { name: true } } },
     });
@@ -69,19 +71,17 @@ export class ProductService {
 
   /** Find product by ID */
   async findOneById(id: string): Promise<Product> {
-    return this.prisma.product.findUnique({
+    return this.prisma.product.findUniqueOrThrow({
       where: { id },
       include: { categories: { select: { name: true } } },
-      rejectOnNotFound: true,
     });
   }
 
   /** Find product by Url Name */
   async findOneByUrlName(urlName: string): Promise<Product> {
-    return this.prisma.product.findUnique({
+    return this.prisma.product.findUniqueOrThrow({
       where: { urlName },
       include: { categories: { select: { name: true } } },
-      rejectOnNotFound: true,
     });
   }
 
@@ -94,9 +94,17 @@ export class ProductService {
       return this.updateProductAndUrlName(id, updateProductDto);
     }
 
+    const { categories, ...updateData } = updateProductDto;
+    const categoriesConnection = categories
+      ? this.connectCategoriesById(categories)
+      : undefined;
+
     return this.prisma.product.update({
       where: { id },
-      data: { ...updateProductDto },
+      data: {
+        ...updateData,
+        ...(categoriesConnection && { categories: categoriesConnection }),
+      },
     });
   }
 
@@ -131,10 +139,18 @@ export class ProductService {
     updateProductDto: UpdateProductDto,
   ): Promise<Product> {
     const urlName = this.formatUrlName(updateProductDto.name);
+    const { categories, ...updateData } = updateProductDto;
+    const categoriesConnection = categories
+      ? this.connectCategoriesById(categories)
+      : undefined;
 
     return this.prisma.product.update({
       where: { id },
-      data: { ...updateProductDto, urlName },
+      data: {
+        ...updateData,
+        urlName,
+        ...(categoriesConnection && { categories: categoriesConnection }),
+      },
     });
   }
 
@@ -143,7 +159,7 @@ export class ProductService {
    */
   private connectCategoriesById(
     categories: string[],
-  ): Prisma.CategoryUncheckedCreateNestedManyWithoutProductsInput {
+  ): Prisma.OldCategoryUncheckedCreateNestedManyWithoutProductsInput {
     let categoriesConnection = { connect: [] };
 
     if (categories) {

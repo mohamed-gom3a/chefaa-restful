@@ -100,6 +100,28 @@
     yarn studio:test
   ```
 
+## 🔍 Linting e Formatação
+
+Este projeto usa ESLint com a nova configuração flat config (ESLint v9+) e Prettier para formatação de código.
+
+```bash
+  # Executa o linter em todos os arquivos TypeScript
+  yarn lint
+
+  # Formata o código usando Prettier
+  yarn format
+```
+
+### Configuração ESLint
+
+O projeto utiliza:
+- **ESLint v9** com configuração flat config (`eslint.config.mjs`)
+- **TypeScript ESLint** para regras específicas do TypeScript
+- **Prettier** para formatação automática
+- **Globals** para Node.js e Jest
+
+As regras estão configuradas para ser mais permissivas com código existente, convertendo erros em warnings para facilitar a migração gradual.
+
 - #### Cobertura dos testes:
      ![Test-Coverage](https://github.com/alvaromrveiga/ecommerce-backend/blob/main/assets/test-coverage.png)
 

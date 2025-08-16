@@ -1,0 +1,73 @@
+
+import {DeliveryStatus} from '@prisma/client'
+import {ApiProperty} from '@nestjs/swagger'
+import {DeliveryOption} from './deliveryOption.entity'
+import {Order} from './order.entity'
+
+
+export class Delivery {
+  @ApiProperty()
+id: string ;
+@ApiProperty({
+  enum: DeliveryStatus,
+  nullable: true,
+})
+deliveryStatus: DeliveryStatus  | null;
+@ApiProperty({
+  nullable: true,
+})
+trackingNumber: string  | null;
+@ApiProperty({
+  nullable: true,
+})
+deliveryAddress: string  | null;
+@ApiProperty({
+  type: 'number',
+  format: 'float',
+  nullable: true,
+})
+deliveryLat: number  | null;
+@ApiProperty({
+  type: 'number',
+  format: 'float',
+  nullable: true,
+})
+deliveryLng: number  | null;
+@ApiProperty({
+  type: 'string',
+  format: 'date-time',
+  nullable: true,
+})
+outAt: Date  | null;
+@ApiProperty({
+  type: 'string',
+  format: 'date-time',
+  nullable: true,
+})
+estimatedAt: Date  | null;
+@ApiProperty({
+  type: 'string',
+  format: 'date-time',
+  nullable: true,
+})
+completedAt: Date  | null;
+@ApiProperty({
+  type: () => DeliveryOption,
+  required: false,
+  nullable: true,
+})
+deliveryOption?: DeliveryOption  | null;
+@ApiProperty({
+  type: 'integer',
+  format: 'int32',
+  nullable: true,
+})
+deliveryOptionId: number  | null;
+@ApiProperty({
+  type: () => Order,
+  required: false,
+})
+order?: Order ;
+@ApiProperty()
+orderId: string ;
+}
