@@ -5,14 +5,21 @@ import {User} from '../../user/entities/user.entity'
 
 
 export class Notification {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 message: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'boolean',
+})
 isImportant: boolean ;
 @ApiProperty({
   enum: NotificationType,
+  enumName: 'NotificationType',
   nullable: true,
 })
 notificationType: NotificationType  | null;
@@ -22,10 +29,12 @@ notificationType: NotificationType  | null;
 })
 createdAt: Date ;
 @ApiProperty({
+  type: 'string',
+})
+userId: string ;
+@ApiProperty({
   type: () => User,
   required: false,
 })
 user?: User ;
-@ApiProperty()
-userId: string ;
 }

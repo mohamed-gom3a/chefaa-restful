@@ -4,11 +4,13 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class OrderItemDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 price: Prisma.Decimal ;
 @ApiProperty({
@@ -17,8 +19,8 @@ price: Prisma.Decimal ;
 })
 quantity: number ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 discountAmount: Prisma.Decimal ;
 }

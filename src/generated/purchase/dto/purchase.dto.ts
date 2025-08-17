@@ -4,7 +4,9 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class PurchaseDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   type: 'integer',
@@ -12,8 +14,8 @@ id: string ;
 })
 amount: number ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 totalPrice: Prisma.Decimal ;
 @ApiProperty({
@@ -23,6 +25,7 @@ totalPrice: Prisma.Decimal ;
 })
 reviewNote: number  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 reviewComment: string  | null;

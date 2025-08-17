@@ -7,6 +7,7 @@ import {IsInt,IsOptional,IsString} from 'class-validator'
 
 export class UpdateCreditCardDto {
   @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
@@ -29,6 +30,7 @@ expiryMonth?: number ;
 @IsInt()
 expiryYear?: number ;
 @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()

@@ -4,13 +4,17 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class PickupDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   enum: PickupStatus,
+  enumName: 'PickupStatus',
 })
 pickupStatus: PickupStatus ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 pharmacyAddress: string  | null;

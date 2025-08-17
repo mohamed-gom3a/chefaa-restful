@@ -1,11 +1,13 @@
 
 import {ApiProperty} from '@nestjs/swagger'
-import {User} from '../../user/entities/user.entity'
 import {Medication} from '../../medication/entities/medication.entity'
+import {User} from '../../user/entities/user.entity'
 
 
 export class WishlistItem {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   type: 'string',
@@ -13,20 +15,22 @@ id: string ;
 })
 createdAt: Date ;
 @ApiProperty({
-  type: () => User,
-  required: false,
+  type: 'string',
 })
-user?: User ;
-@ApiProperty()
 userId: string ;
+@ApiProperty({
+  type: 'integer',
+  format: 'int32',
+})
+medicationId: number ;
 @ApiProperty({
   type: () => Medication,
   required: false,
 })
 medication?: Medication ;
 @ApiProperty({
-  type: 'integer',
-  format: 'int32',
+  type: () => User,
+  required: false,
 })
-medicationId: number ;
+user?: User ;
 }

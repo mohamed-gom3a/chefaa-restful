@@ -7,12 +7,14 @@ import {IsOptional,IsString} from 'class-validator'
 
 export class UpdateCategoryDto {
   @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 name?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

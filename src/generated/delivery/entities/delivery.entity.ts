@@ -6,18 +6,23 @@ import {Order} from '../../order/entities/order.entity'
 
 
 export class Delivery {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   enum: DeliveryStatus,
+  enumName: 'DeliveryStatus',
   nullable: true,
 })
 deliveryStatus: DeliveryStatus  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 trackingNumber: string  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 deliveryAddress: string  | null;
@@ -52,22 +57,24 @@ estimatedAt: Date  | null;
 })
 completedAt: Date  | null;
 @ApiProperty({
-  type: () => DeliveryOption,
-  required: false,
-  nullable: true,
-})
-deliveryOption?: DeliveryOption  | null;
-@ApiProperty({
   type: 'integer',
   format: 'int32',
   nullable: true,
 })
 deliveryOptionId: number  | null;
 @ApiProperty({
+  type: 'string',
+})
+orderId: string ;
+@ApiProperty({
+  type: () => DeliveryOption,
+  required: false,
+  nullable: true,
+})
+deliveryOption?: DeliveryOption  | null;
+@ApiProperty({
   type: () => Order,
   required: false,
 })
 order?: Order ;
-@ApiProperty()
-orderId: string ;
 }

@@ -7,11 +7,15 @@ import {IsBoolean,IsDecimal,IsInt,IsNotEmpty,IsOptional,IsString} from 'class-va
 
 
 export class CreateDeliveryOptionDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 optionName: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 optionType: string ;
@@ -23,15 +27,15 @@ optionType: string ;
 @IsInt()
 deliveryTimeHours: number ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 @IsNotEmpty()
 @IsDecimal()
 deliveryFee: Prisma.Decimal ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
   nullable: true,
 })
@@ -39,8 +43,8 @@ deliveryFee: Prisma.Decimal ;
 @IsDecimal()
 discountPercentage?: Prisma.Decimal  | null;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
   nullable: true,
 })
@@ -48,6 +52,7 @@ discountPercentage?: Prisma.Decimal  | null;
 @IsDecimal()
 minimumOrderAmount?: Prisma.Decimal  | null;
 @ApiProperty({
+  type: 'boolean',
   required: false,
   nullable: true,
 })

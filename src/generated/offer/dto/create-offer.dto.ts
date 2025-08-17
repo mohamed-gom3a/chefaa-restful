@@ -1,23 +1,25 @@
 
-import {Prisma,AmountType} from '@prisma/client'
+import {AmountType,Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {IsDateString,IsDecimal,IsInt,IsNotEmpty,IsOptional} from 'class-validator'
+import {IsDateString,IsDecimal,IsEnum,IsInt,IsNotEmpty,IsOptional} from 'class-validator'
 
 
 
 
 export class CreateOfferDto {
   @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 @IsNotEmpty()
 @IsDecimal()
 amount: Prisma.Decimal ;
 @ApiProperty({
   enum: AmountType,
+  enumName: 'AmountType',
 })
 @IsNotEmpty()
+@IsEnum(AmountType)
 amountType: AmountType ;
 @ApiProperty({
   type: 'integer',

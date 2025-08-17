@@ -1,7 +1,6 @@
 import { MulterOptions } from '@nestjs/platform-express/multer/interfaces/multer-options.interface';
 import { diskStorage } from 'multer';
 import path from 'path';
-import { FileTypeError } from 'src/models/product/exceptions/file-type.exception';
 
 /** Constant containing a Regular Expression
  * with the valid image upload types
@@ -36,7 +35,12 @@ export const multerUploadConfig: MulterOptions = {
       return callback(null, true);
     }
 
-    return callback(new FileTypeError(validImageUploadTypesRegex), false);
+    return callback(
+      new Error(
+        `Invalid file type. Allowed types: ${validImageUploadTypesRegex}`,
+      ),
+      false,
+    );
   },
 
   limits: {

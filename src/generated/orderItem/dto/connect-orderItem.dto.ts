@@ -6,7 +6,9 @@ import {IsNotEmpty,IsString} from 'class-validator'
 
 
 export class ConnectOrderItemDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 id: string ;

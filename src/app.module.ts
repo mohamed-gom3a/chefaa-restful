@@ -4,6 +4,7 @@ import { AccessJwtAuthGuard } from './auth/access-jwt-auth.guard';
 import { AuthModule } from './auth/auth.module';
 import { CategoryModule } from './models/category/category.module';
 import { MedicationModule } from './models/medication/medication.module';
+import { SuperCategoryModule } from './models/superCategory/superCategory.module';
 import { UserModule } from './models/user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 
@@ -14,6 +15,7 @@ import { PrismaModule } from './prisma/prisma.module';
     PrismaModule,
     MedicationModule,
     CategoryModule,
+    SuperCategoryModule,
   ],
   providers: [
     {

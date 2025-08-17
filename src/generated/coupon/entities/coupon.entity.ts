@@ -1,34 +1,41 @@
 
-import {Prisma,AmountType} from '@prisma/client'
+import {AmountType,Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
 import {Order} from '../../order/entities/order.entity'
 
 
 export class Coupon {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 code: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 description: string ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 amount: Prisma.Decimal ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 minOrderValue: Prisma.Decimal ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   nullable: true,
 })
 maxDiscountValue: Prisma.Decimal  | null;
 @ApiProperty({
   enum: AmountType,
+  enumName: 'AmountType',
 })
 amountType: AmountType ;
 @ApiProperty({
@@ -42,7 +49,9 @@ usageLimit: number  | null;
   format: 'int32',
 })
 usedCount: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'boolean',
+})
 isActive: boolean ;
 @ApiProperty({
   type: 'string',
@@ -54,7 +63,9 @@ validFrom: Date ;
   format: 'date-time',
 })
 validUntil: Date ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 createdBy: string ;
 @ApiProperty({
   type: 'string',

@@ -7,6 +7,7 @@ import {IsOptional,IsString} from 'class-validator'
 
 export class UpdateOrderDto {
   @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -14,6 +15,7 @@ export class UpdateOrderDto {
 @IsString()
 orderNote?: string  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

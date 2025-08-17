@@ -1,43 +1,26 @@
 
-import {Gender,Country,Role} from '@prisma/client'
+import {Country,Gender,Role} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
 
 
 export class UserDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
-email: string ;
-@ApiProperty()
-password: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 name: string  | null;
 @ApiProperty({
-  nullable: true,
+  type: 'string',
 })
-address: string  | null;
+email: string ;
 @ApiProperty({
-  type: 'integer',
-  format: 'int32',
-  nullable: true,
+  type: 'string',
 })
-phone: number  | null;
-@ApiProperty({
-  enum: Gender,
-  nullable: true,
-})
-gender: Gender  | null;
-@ApiProperty({
-  enum: Country,
-  nullable: true,
-})
-country: Country  | null;
-@ApiProperty({
-  enum: Role,
-})
-role: Role ;
+password: string ;
 @ApiProperty({
   type: 'string',
   format: 'date-time',
@@ -48,4 +31,32 @@ createdAt: Date ;
   format: 'date-time',
 })
 updatedAt: Date ;
+@ApiProperty({
+  type: 'string',
+  nullable: true,
+})
+address: string  | null;
+@ApiProperty({
+  enum: Role,
+  enumName: 'Role',
+})
+role: Role ;
+@ApiProperty({
+  enum: Country,
+  enumName: 'Country',
+  nullable: true,
+})
+country: Country  | null;
+@ApiProperty({
+  enum: Gender,
+  enumName: 'Gender',
+  nullable: true,
+})
+gender: Gender  | null;
+@ApiProperty({
+  type: 'integer',
+  format: 'int32',
+  nullable: true,
+})
+phone: number  | null;
 }

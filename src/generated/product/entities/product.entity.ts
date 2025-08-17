@@ -1,24 +1,27 @@
 
 import {Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {OldCategory} from '../../oldCategory/entities/oldCategory.entity'
 import {Purchase} from '../../purchase/entities/purchase.entity'
+import {OldCategory} from '../../oldCategory/entities/oldCategory.entity'
 
 
 export class Product {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
-name: string ;
-@ApiProperty()
-urlName: string ;
 @ApiProperty({
+  type: 'string',
+})
+name: string ;
+@ApiProperty({
+  type: 'string',
   nullable: true,
 })
 picture: string  | null;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 basePrice: Prisma.Decimal ;
 @ApiProperty({
@@ -32,6 +35,7 @@ discountPercentage: number ;
 })
 stock: number ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 description: string  | null;
@@ -41,15 +45,19 @@ description: string  | null;
 })
 createdAt: Date ;
 @ApiProperty({
-  type: () => OldCategory,
-  isArray: true,
-  required: false,
+  type: 'string',
 })
-categories?: OldCategory[] ;
+urlName: string ;
 @ApiProperty({
   type: () => Purchase,
   isArray: true,
   required: false,
 })
 Purchase?: Purchase[] ;
+@ApiProperty({
+  type: () => OldCategory,
+  isArray: true,
+  required: false,
+})
+OldCategory?: OldCategory[] ;
 }
