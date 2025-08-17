@@ -1,6 +1,6 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Medication, Prisma } from '@prisma/client';
-import { BasePaginationDto } from 'src/generated/base-pagination.dto';
+import { BasePaginationDto } from 'src/common/dtos/base-pagination.dto';
 import { ConnectMedicationDto } from 'src/generated/medication/dto/connect-medication.dto';
 import { UpdateMedicationDto } from 'src/generated/medication/dto/update-medication.dto';
 import { PrismaService } from 'src/prisma/prisma.service';

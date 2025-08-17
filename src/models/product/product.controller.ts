@@ -15,12 +15,12 @@ import { ApiOperation, ApiTags } from '@nestjs/swagger';
 import { Public } from 'src/auth/public.decorator';
 import { FileUpload } from 'src/common/decorators/file-upload.decorator';
 import { IsAdmin } from 'src/common/decorators/is-admin.decorator';
+import { File } from '../../common/types/file';
 import { CreateProductDto } from './dto/create-product.dto';
 import { FindProductsDto } from './dto/find-products.dto';
 import { UpdateProductDto } from './dto/update-product.dto';
 import { Product } from './entities/product.entity';
 import { ProductService } from './product.service';
-import { File } from './types/file';
 
 /** Exposes product CRUD endpoints */
 @ApiTags('product')

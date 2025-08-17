@@ -1,8 +1,8 @@
 import { Test, TestingModule } from '@nestjs/testing';
-import { ProductService } from './product.service';
+import { File } from '../../common/types/file';
 import { PrismaService } from '../../prisma/prisma.service';
 import { Product } from './entities/product.entity';
-import { File } from './types/file';
+import { ProductService } from './product.service';
 
 let productArray: Product[] = [];
 

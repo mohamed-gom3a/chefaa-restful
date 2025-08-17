@@ -6,10 +6,9 @@ import { ProductModule } from './models/product/product.module';
 import { UserModule } from './models/user/user.module';
 import { PrismaModule } from './prisma/prisma.module';
 
-import { PurchaseModule } from './models/purchase/purchase.module';
-import { MedicationModule } from './medication/medication.module';
 import { CategoryModule } from './category/category.module';
-import { CateogyrService } from './cateogyr/cateogyr.service';
+import { MedicationModule } from './medication/medication.module';
+import { PurchaseModule } from './models/purchase/purchase.module';
 
 @Module({
   imports: [
@@ -26,7 +25,6 @@ import { CateogyrService } from './cateogyr/cateogyr.service';
       provide: APP_GUARD,
       useClass: AccessJwtAuthGuard,
     },
-    CateogyrService,
   ],
 })
 export class AppModule {}
