@@ -1,0 +1,395 @@
+---
+description: Project directory structure and organization for the Chefaa Flutter monorepo with Dart Frog backend
+globs: **/*
+alwaysApply: true
+---
+
+# Chefaa Project Structure Guide
+
+## Project Overview
+
+**Chefaa** is a Flutter-based e-commerce/pharmacy application with a monorepo structure using Melos for package management. The project includes a Dart Frog backend API and follows a feature-driven architecture.
+
+## Root Directory Structure
+
+```
+chefaa/
+├── .cursor/                    # Cursor IDE configuration and rules
+├── .dart_tool/                 # Dart tool cache and generated files
+├── .flutter-plugins-dependencies # Flutter plugin dependencies
+├── .github/                    # GitHub workflows and configurations
+├── .idea/                      # IntelliJ IDEA configuration
+├── .mason/                     # Mason brick templates cache
+├── .vscode/                    # VS Code configuration
+├── android/                    # Android platform-specific code
+├── api/                        # Dart Frog backend API
+├── bricks/                     # Mason brick templates
+├── build/                      # Build output directory
+├── ios/                        # iOS platform-specific code
+├── lib/                        # Main Flutter application code
+├── linux/                      # Linux platform-specific code
+├── macos/                      # macOS platform-specific code
+├── packages/                   # Monorepo packages
+├── test/                       # Flutter widget tests
+├── web/                        # Web platform-specific code
+├── windows/                    # Windows platform-specific code
+├── analysis_options.yaml       # Dart analysis configuration
+├── backend.md                  # Backend API development guidelines
+├── chefaa.iml                  # IntelliJ IDEA project file
+├── devtools_options.yaml       # Flutter DevTools configuration
+├── firebase.json               # Firebase configuration
+├── mason-lock.json             # Mason dependencies lock file
+├── mason.yaml                  # Mason configuration
+├── melos.yaml                  # Melos monorepo configuration
+├── page-design.html            # Design reference file
+├── pubspec.lock                # Flutter dependencies lock file
+├── pubspec.yaml                # Main Flutter dependencies
+├── README.md                   # Project documentation
+└── temp                        # Temporary files
+```
+
+## Core Application Structure (`lib/`)
+
+### Main Entry Points
+- `bootstrap.dart` - Application bootstrap and initialization
+- `main_development.dart` - Development environment entry point
+- `main_production.dart` - Production environment entry point
+- `main_staging.dart` - Staging environment entry point
+- `firebase_options_*.dart` - Firebase configuration for each environment
+
+### Core Architecture (`lib/CORE/`)
+
+```
+lib/CORE/
+├── app/                        # Application-level configuration
+│   ├── bloc/                   # Global BLoC state management
+│   └── view/                   # Root app views
+├── caching/                    # Data caching layer
+│   ├── adapters/               # Hive adapters
+│   ├── cache_manager.dart      # Cache management
+│   └── hive_adapters.dart      # Hive configuration
+├── di/                         # Dependency injection
+│   ├── injectable_config.dart  # Injectable configuration
+│   └── register_module.dart    # Service registration
+├── enums/                      # Application enums
+│   ├── category_type.dart
+│   ├── request_status.dart
+│   └── super_category_type.dart
+├── networking/                 # API networking layer
+│   ├── api_constants.dart      # API endpoints
+│   ├── api_service.dart        # API service implementation
+│   └── app_dio.dart           # Dio HTTP client configuration
+├── repos/                      # Repository layer
+│   ├── account_repository.dart
+│   ├── address_repository.dart
+│   ├── card_repository.dart
+│   └── [other repositories]
+├── router/                     # Navigation and routing
+│   ├── app_router.dart         # Main router configuration
+│   └── app_routes.dart         # Route definitions
+├── services/                   # Core services
+│   └── select_image_service.dart
+├── utils/                      # Utility functions and helpers
+│   ├── bloc_observer.dart      # BLoC debugging
+│   ├── extensions.dart         # Dart extensions
+│   └── mixins.dart            # Reusable mixins
+└── widgets/                    # Shared UI components
+    ├── add_button.dart
+    ├── image_type_helper.dart
+    └── mini_product_grid_card.dart
+```
+
+### Feature Modules (`lib/FEATURES/`)
+
+```
+lib/FEATURES/
+├── account/                    # User account management
+│   ├── add_address/
+│   ├── address_book/
+│   ├── change_password/
+│   ├── credit_card/
+│   ├── cubit/                  # Account state management
+│   ├── edit_address/
+│   ├── edit_profile/
+│   ├── health_profile/
+│   ├── notifications/
+│   ├── orders/
+│   ├── profile/
+│   ├── view/                   # Account UI views
+│   └── wishlist/
+├── auth/                       # Authentication
+│   ├── cubit/                  # Auth state management
+│   ├── login/
+│   ├── sign_up/
+│   └── view/                   # Auth UI views
+├── brands/                     # Brand management
+│   ├── brand/
+│   └── view/
+├── bundle/                     # Product bundles
+│   ├── cubit/
+│   ├── data/
+│   └── view/
+├── cart/                       # Shopping cart
+│   ├── cubit/
+│   ├── repository/
+│   └── view/
+├── category/                   # Product categories
+│   ├── bloc/
+│   ├── models/
+│   ├── repository/
+│   └── view/
+├── checkout/                   # Checkout process
+│   └── view/
+├── error/                      # Error handling
+│   ├── error.dart
+│   └── view/
+├── example/                    # Example/template feature
+│   ├── cubit/
+│   └── view/
+├── home/                       # Home screen
+│   ├── bloc/
+│   ├── models/
+│   └── view/
+├── map/                        # Location and mapping
+│   ├── bloc/
+│   ├── map.dart
+│   └── view/
+├── navigation/                 # Bottom navigation
+│   └── view/
+├── prescription/               # Prescription management
+│   ├── cubit/
+│   ├── models/
+│   └── view/
+├── product/                    # Product details
+│   └── view/
+└── search/                     # Search functionality
+    └── [search components]
+```
+
+## Monorepo Packages (`packages/`)
+
+```
+packages/
+├── app_ui/                     # Shared UI components and design system
+├── authentication_client/      # Authentication client packages
+│   ├── authentication_client/  # Core auth client
+│   ├── firebase_authentication_client/ # Firebase auth implementation
+│   └── token_storage/          # Token storage utilities
+├── env/                        # Environment configuration
+├── location_repository/        # Location services
+├── shared/                     # Shared utilities and models
+├── storage/                    # Storage packages
+│   ├── persistent_storage/     # Local storage
+│   ├── secure_storage/         # Secure storage
+│   └── storage/                # Storage abstractions
+├── user_repository/            # User data management
+└── utilities/                  # Utility packages
+    ├── form_fields/            # Form field components
+    └── stormberry/             # Database utilities
+```
+
+## Backend API (`api/`)
+
+```
+api/
+├── .dart_frog/                 # Dart Frog generated files
+├── .dart_tool/                 # Dart tool cache
+├── data/                       # Static data files
+├── lib/                        # API library code
+│   ├── api.dart                # Main API exports
+│   ├── client.dart             # Client exports
+│   └── src/                    # Source code
+│       ├── client/             # API client implementations
+│       │   ├── api_client.dart      # Main API client
+│       │   ├── api_exceptions.dart  # API exception handling
+│       │   ├── client.dart          # Client exports
+│       │   └── supabase_service.dart # Supabase integration
+│       ├── common/             # Shared utilities
+│       │   ├── common.dart          # Common exports
+│       │   ├── config/              # Configuration
+│       │   │   ├── config.dart           # Config exports
+│       │   │   ├── delivery_estimator.dart # Delivery calculations
+│       │   │   ├── env.dart              # Environment variables
+│       │   │   └── uuid_gen.dart         # UUID generation
+│       │   └── utils/               # Utility functions
+│       │       ├── extensions/           # Extension methods
+│       │       └── utils.dart            # Utility exports
+│       ├── data/               # Data layer
+│       │   ├── database/            # Database operations
+│       │   │   ├── actions/              # Database actions
+│       │   │   ├── queries/              # Database queries
+│       │   │   └── database.dart         # Database exports
+│       │   ├── models/              # Data models
+│       │   │   ├── enums/                # Model enums
+│       │   │   ├── postgres/             # PostgreSQL models
+│       │   │   ├── *.dart                # Generated model files
+│       │   │   ├── address.dart          # Address model
+│       │   │   ├── brand.dart            # Brand model
+│       │   │   ├── cart.dart             # Cart model
+│       │   │   ├── category.dart         # Category model
+│       │   │   ├── coupon.dart           # Coupon model
+│       │   │   ├── delivery.dart         # Delivery model
+│       │   │   ├── medication.dart       # Medication model
+│       │   │   ├── order.dart            # Order model
+│       │   │   ├── prescription.dart     # Prescription model
+│       │   │   ├── user_profile.dart     # User profile model
+│       │   │   └── models.dart           # Model exports
+│       │   └── services/            # Business logic services
+│       │       └── order_service.dart    # Order management
+│       └── middleware/         # Request middleware
+│           ├── database_provider.dart    # Database injection
+│           ├── middleware.dart           # Middleware exports
+│           ├── supabase_provider.dart    # Supabase injection
+│           └── user_provider.dart        # User authentication
+├── routes/                     # API endpoints
+│   ├── index.dart              # Main router
+│   └── api/                    # API routes
+│       └── v1/                 # Version 1 API routes
+│           ├── _middleware.dart         # Route middleware
+│           ├── add_fake_data.dart       # Development data
+│           ├── addresses/               # Address management
+│           ├── brands/                  # Brand management
+│           ├── cards/                   # Payment card management
+│           ├── cart/                    # Shopping cart
+│           │   ├── index.dart               # Cart operations
+│           │   └── items/                   # Cart items
+│           │       └── index.dart
+│           ├── categories/              # Product categories
+│           ├── chats/                   # Chat functionality
+│           ├── coupons/                 # Coupon management
+│           ├── deliveries/              # Delivery management
+│           ├── delivery-options/        # Delivery options
+│           ├── home/                    # Home page data
+│           ├── images/                  # Image management
+│           ├── medications/             # Medication catalog
+│           │   ├── index.dart               # Medication list
+│           │   ├── [id].dart                # Single medication
+│           │   ├── brand/                   # Brand filtering
+│           │   │   └── [id].dart
+│           │   ├── category/                # Category filtering
+│           │   │   └── [id].dart
+│           │   └── super-category/          # Super category filtering
+│           │       └── [id].dart
+│           ├── messages/                # Message management
+│           ├── notifications/           # Notification system
+│           ├── orders/                  # Order management
+│           │   ├── index.dart               # Order list
+│           │   └── [orderId].dart           # Single order
+│           ├── prescriptions/           # Prescription management
+│           ├── profiles/                # User profile management
+│           ├── super-categories/        # Super category management
+│           ├── wishlist/                # Wishlist management
+│           └── ws/                      # WebSocket endpoints
+│               ├── notification.dart         # General notifications
+│               ├── user_notifications.dart    # User-specific notifications
+│               └── user_order_status_notification.dart # Order status updates
+├── test/                       # API tests
+├── analysis_options.yaml       # Dart analysis configuration
+├── build.yaml                  # Build configuration
+├── pubspec.lock                # Dependencies lock file
+├── pubspec.yaml                # API dependencies
+└── README.md                   # API documentation
+```
+
+## Platform-Specific Directories
+
+### Android (`android/`)
+- `app/` - Android application code
+- `build.gradle.kts` - Android build configuration
+- `gradle/` - Gradle wrapper
+- `settings.gradle.kts` - Gradle settings
+
+### iOS (`ios/`)
+- `Flutter/` - Flutter iOS configuration
+- `Runner/` - iOS application code
+- `Podfile` - CocoaPods dependencies
+
+### Web (`web/`)
+- `index.html` - Web entry point
+- `manifest.json` - PWA manifest
+- `icons/` - Web app icons
+
+## Configuration Files
+
+### Root Configuration
+- `pubspec.yaml` - Main Flutter dependencies and project metadata
+- `melos.yaml` - Monorepo package management configuration
+- `analysis_options.yaml` - Dart static analysis rules
+- `firebase.json` - Firebase project configuration
+
+### Development Tools
+- `.vscode/` - VS Code workspace settings
+- `.idea/` - IntelliJ IDEA project settings
+- `devtools_options.yaml` - Flutter DevTools configuration
+
+## Brick Templates (`bricks/`)
+
+```
+bricks/
+├── cubit/                      # BLoC/Cubit template
+│   ├── __brick__/
+│   │   └── cubit/
+│   └── brick.yaml
+└── flutter_feature/            # Feature module template
+    ├── __brick__/
+    │   └── {{feature_name}}/
+    └── brick.yaml
+```
+
+## Key Development Patterns
+
+### Feature Organization
+Each feature follows a consistent structure:
+- `cubit/` or `bloc/` - State management
+- `models/` - Data models (when needed)
+- `repository/` - Data access layer (when needed)
+- `view/` - UI components
+
+### Package Dependencies
+- Use path dependencies for local packages: `path: packages/package_name`
+- Follow Melos workspace conventions
+- Maintain consistent versioning across packages
+
+### Environment Configuration
+- Separate Firebase configurations for dev/staging/prod
+- Environment-specific entry points
+- Use `env` package for configuration management
+
+### Code Generation
+- Injectable for dependency injection
+- Hive for local storage
+- JSON serialization for API models
+- Build runner for code generation
+
+## Best Practices
+
+1. **Feature Isolation**: Each feature should be self-contained with its own state management
+2. **Package Boundaries**: Use packages for shared functionality, not feature code
+3. **Consistent Naming**: Follow established naming conventions across the project
+4. **Environment Separation**: Maintain clear separation between development environments
+5. **Code Generation**: Leverage code generation tools for boilerplate reduction
+6. **Testing**: Include tests for both features and packages
+7. **Documentation**: Keep README files updated for each package and major feature
+
+## Common Commands
+
+```bash
+# Monorepo management
+melos bootstrap              # Install all package dependencies
+melos clean                  # Clean all build artifacts
+melos run test              # Run tests across all packages
+
+# Flutter development
+flutter pub get             # Install dependencies
+flutter run                 # Run the app
+flutter build apk           # Build Android APK
+flutter build ios           # Build iOS app
+
+# Code generation
+flutter packages pub run build_runner build  # Generate code
+flutter packages pub run build_runner watch  # Watch for changes
+
+# Mason templates
+mason make flutter_feature feature_name      # Create new feature
+mason make cubit cubit_name                  # Create new cubit
+```
