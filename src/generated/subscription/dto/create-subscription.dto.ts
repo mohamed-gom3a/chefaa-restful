@@ -1,7 +1,7 @@
 
 import {IntervalType} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {IsBoolean,IsDateString,IsNotEmpty,IsOptional} from 'class-validator'
+import {IsBoolean,IsDateString,IsEnum,IsNotEmpty,IsOptional} from 'class-validator'
 
 
 
@@ -9,8 +9,10 @@ import {IsBoolean,IsDateString,IsNotEmpty,IsOptional} from 'class-validator'
 export class CreateSubscriptionDto {
   @ApiProperty({
   enum: IntervalType,
+  enumName: 'IntervalType',
 })
 @IsNotEmpty()
+@IsEnum(IntervalType)
 intervalType: IntervalType ;
 @ApiProperty({
   type: 'string',
@@ -38,6 +40,7 @@ lastRefillDate?: Date  | null;
 @IsDateString()
 endDate?: Date  | null;
 @ApiProperty({
+  type: 'boolean',
   required: false,
   nullable: true,
 })

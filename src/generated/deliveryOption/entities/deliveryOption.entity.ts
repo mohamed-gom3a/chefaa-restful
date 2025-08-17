@@ -10,9 +10,13 @@ export class DeliveryOption {
   format: 'int32',
 })
 id: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 optionName: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 optionType: string ;
 @ApiProperty({
   type: 'integer',
@@ -20,27 +24,32 @@ optionType: string ;
 })
 deliveryTimeHours: number ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 deliveryFee: Prisma.Decimal ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   nullable: true,
 })
 discountPercentage: Prisma.Decimal  | null;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   nullable: true,
 })
 minimumOrderAmount: Prisma.Decimal  | null;
-@ApiProperty()
+@ApiProperty({
+  type: 'boolean',
+})
 isActive: boolean ;
-@ApiProperty()
+@ApiProperty({
+  type: 'boolean',
+})
 isAvailable: boolean ;
 @ApiProperty({
+  type: 'boolean',
   nullable: true,
 })
 isFreeDelivery: boolean  | null;

@@ -8,36 +8,38 @@ import {IsDateString,IsDecimal,IsInt,IsOptional,IsString} from 'class-validator'
 
 export class UpdateCouponDto {
   @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 code?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 description?: string ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
 })
 @IsOptional()
 @IsDecimal()
 amount?: Prisma.Decimal ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
 })
 @IsOptional()
 @IsDecimal()
 minOrderValue?: Prisma.Decimal ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
   nullable: true,
 })
@@ -70,6 +72,7 @@ validFrom?: Date ;
 @IsDateString()
 validUntil?: Date ;
 @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()

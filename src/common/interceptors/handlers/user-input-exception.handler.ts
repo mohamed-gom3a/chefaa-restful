@@ -1,11 +1,6 @@
-import {
-  BadRequestException,
-  NotFoundException,
-  UnauthorizedException,
-} from '@nestjs/common';
+import { BadRequestException, UnauthorizedException } from '@nestjs/common';
 import { AuthServiceInputException } from 'src/auth/exceptions/auth-service-input.exception';
-import { ProductServiceInputException } from 'src/models/product/exceptions/product-service-input.exception';
-import { PurchaseServiceInputException } from 'src/models/purchase/exceptions/purchase-service-input.exception';
+
 import { UserServiceInputException } from 'src/models/user/exceptions/user-service-input.exception';
 import { ExceptionHandler } from './exception.handler';
 
@@ -23,14 +18,6 @@ export class UserInputExceptionHandler implements ExceptionHandler {
 
     if (error instanceof UserServiceInputException) {
       throw new BadRequestException(error.message);
-    }
-
-    if (error instanceof ProductServiceInputException) {
-      throw new BadRequestException(error.message);
-    }
-
-    if (error instanceof PurchaseServiceInputException) {
-      throw new NotFoundException(error.message);
     }
   }
 }

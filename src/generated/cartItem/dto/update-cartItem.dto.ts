@@ -8,8 +8,8 @@ import {IsDecimal,IsInt,IsOptional} from 'class-validator'
 
 export class UpdateCartItemDto {
   @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
 })
 @IsOptional()

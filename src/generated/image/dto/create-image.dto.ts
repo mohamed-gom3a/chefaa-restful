@@ -6,7 +6,9 @@ import {IsNotEmpty,IsString} from 'class-validator'
 
 
 export class CreateImageDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 url: string ;

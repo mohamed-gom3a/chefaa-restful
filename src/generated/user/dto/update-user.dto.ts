@@ -1,25 +1,28 @@
 
-import {Gender,Country} from '@prisma/client'
+import {Country,Gender} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {IsInt,IsOptional,IsString} from 'class-validator'
+import {IsEnum,IsInt,IsOptional,IsString} from 'class-validator'
 
 
 
 
 export class UpdateUserDto {
   @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 email?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 password?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -27,6 +30,7 @@ password?: string ;
 @IsString()
 name?: string  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -44,17 +48,21 @@ address?: string  | null;
 phone?: number  | null;
 @ApiProperty({
   enum: Gender,
+  enumName: 'Gender',
   required: false,
   nullable: true,
 })
 @IsOptional()
+@IsEnum(Gender)
 gender?: Gender  | null;
 @ApiProperty({
   enum: Country,
+  enumName: 'Country',
   default: 'EG',
   required: false,
   nullable: true,
 })
 @IsOptional()
+@IsEnum(Country)
 country?: Country  | null;
 }

@@ -1,5 +1,5 @@
 
-import {Prisma,OrderStatus,ContactPreference,ConflictSolution,PaymentMethod} from '@prisma/client'
+import {ConflictSolution,ContactPreference,OrderStatus,PaymentMethod,Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
 import {Delivery} from '../../delivery/entities/delivery.entity'
 import {Pickup} from '../../pickup/entities/pickup.entity'
@@ -10,44 +10,52 @@ import {OrderItem} from '../../orderItem/entities/orderItem.entity'
 
 
 export class Order {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   enum: OrderStatus,
+  enumName: 'OrderStatus',
 })
 orderStatus: OrderStatus ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 subtotalPrice: Prisma.Decimal ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 totalPrice: Prisma.Decimal ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 discountAmount: Prisma.Decimal ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 orderNote: string  | null;
 @ApiProperty({
   enum: ContactPreference,
+  enumName: 'ContactPreference',
 })
 contactPreference: ContactPreference ;
 @ApiProperty({
   enum: ConflictSolution,
+  enumName: 'ConflictSolution',
 })
 conflictSolution: ConflictSolution ;
 @ApiProperty({
   enum: PaymentMethod,
+  enumName: 'PaymentMethod',
 })
 paymentMethod: PaymentMethod ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 paymentName: string  | null;
@@ -86,6 +94,7 @@ payment?: Payment  | null;
 })
 coupon?: Coupon  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 couponId: string  | null;
@@ -94,7 +103,9 @@ couponId: string  | null;
   required: false,
 })
 user?: User ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 userId: string ;
 @ApiProperty({
   type: () => OrderItem,

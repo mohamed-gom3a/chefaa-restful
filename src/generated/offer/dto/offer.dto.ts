@@ -1,5 +1,5 @@
 
-import {Prisma,AmountType} from '@prisma/client'
+import {AmountType,Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
 
 
@@ -10,12 +10,13 @@ export class OfferDto {
 })
 id: number ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 amount: Prisma.Decimal ;
 @ApiProperty({
   enum: AmountType,
+  enumName: 'AmountType',
 })
 amountType: AmountType ;
 @ApiProperty({
@@ -23,7 +24,9 @@ amountType: AmountType ;
   format: 'int32',
 })
 position: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'boolean',
+})
 active: boolean ;
 @ApiProperty({
   type: 'string',

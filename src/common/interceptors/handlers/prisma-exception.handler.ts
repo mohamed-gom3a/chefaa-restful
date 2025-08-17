@@ -5,6 +5,8 @@ import { CategoryNotFoundException } from 'src/common/exceptions/category/catego
 import { ProductNameInUseException } from 'src/common/exceptions/product/product-name-in-use.exception';
 import { ProductNotFoundException } from 'src/common/exceptions/product/product-not-found.exception';
 import { PurchaseNotFoundException } from 'src/common/exceptions/purchase/purchase-not-found.exception';
+import { SuperCategoryNameInUseException } from 'src/common/exceptions/superCategory/super-category-name-in-use.exception';
+import { SuperCategoryNotFoundException } from 'src/common/exceptions/superCategory/super-category-not-found.exception';
 import { EmailInUseException } from 'src/common/exceptions/user/email-in-use.exception';
 import { UserNotFoundException } from 'src/common/exceptions/user/user-not-found.exception';
 import { ExceptionHandler } from './exception.handler';
@@ -30,6 +32,10 @@ export class PrismaExceptionHandler implements ExceptionHandler {
 
           if (this.isCategoryNameConstraintViolation(error)) {
             throw new CategoryNameInUseException();
+          }
+
+          if (this.isSuperCategoryNameConstraintViolation(error)) {
+            throw new SuperCategoryNameInUseException();
           }
           break;
 
@@ -59,6 +65,10 @@ export class PrismaExceptionHandler implements ExceptionHandler {
           if (this.isPurchaseError(error)) {
             throw new PurchaseNotFoundException();
           }
+
+          if (this.isSuperCategoryError(error)) {
+            throw new SuperCategoryNotFoundException();
+          }
           break;
 
         default:
@@ -77,6 +87,10 @@ export class PrismaExceptionHandler implements ExceptionHandler {
 
       if (error.message === 'No Purchase found') {
         throw new PurchaseNotFoundException();
+      }
+
+      if (error.message === 'No SuperCategory found') {
+        throw new SuperCategoryNotFoundException();
       }
     }
   }
@@ -114,6 +128,16 @@ export class PrismaExceptionHandler implements ExceptionHandler {
     );
   }
 
+  /** Returns wether the error happened in the super category name field or not */
+  private isSuperCategoryNameConstraintViolation(
+    error: PrismaClientKnownRequestError,
+  ): boolean {
+    return (
+      Object.values(error.meta)[0][0] === 'name' &&
+      error.message.includes('prisma.superCategory')
+    );
+  }
+
   /** Returns wether the error happened on an user prisma query or not */
   private isUserError(error: PrismaClientKnownRequestError): boolean {
     return error.message.includes('prisma.user');
@@ -140,5 +164,10 @@ export class PrismaExceptionHandler implements ExceptionHandler {
   /** Returns wether the error happened on an purchase prisma query or not */
   private isPurchaseError(error: PrismaClientKnownRequestError): boolean {
     return error.message.includes('prisma.purchase');
+  }
+
+  /** Returns wether the error happened on an super category prisma query or not */
+  private isSuperCategoryError(error: PrismaClientKnownRequestError): boolean {
+    return error.message.includes('prisma.superCategory');
   }
 }

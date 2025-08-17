@@ -8,8 +8,8 @@ import {IsDecimal,IsInt,IsNotEmpty} from 'class-validator'
 
 export class CreateOrderItemDto {
   @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 @IsNotEmpty()
 @IsDecimal()

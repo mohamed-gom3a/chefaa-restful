@@ -4,16 +4,22 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class PaymentDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 amount: Prisma.Decimal ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 method: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 transactionId: string ;
 @ApiProperty({
   type: 'string',

@@ -9,7 +9,9 @@ export class CreditCard {
   format: 'int32',
 })
 id: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 last4: string ;
 @ApiProperty({
   type: 'integer',
@@ -21,7 +23,9 @@ expiryMonth: number ;
   format: 'int32',
 })
 expiryYear: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 token: string ;
 @ApiProperty({
   type: 'string',
@@ -33,6 +37,8 @@ createdAt: Date ;
   required: false,
 })
 user?: User ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 userId: string ;
 }

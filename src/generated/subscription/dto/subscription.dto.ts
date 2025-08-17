@@ -11,6 +11,7 @@ export class SubscriptionDto {
 id: number ;
 @ApiProperty({
   enum: IntervalType,
+  enumName: 'IntervalType',
 })
 intervalType: IntervalType ;
 @ApiProperty({
@@ -31,6 +32,7 @@ lastRefillDate: Date  | null;
 })
 endDate: Date  | null;
 @ApiProperty({
+  type: 'boolean',
   nullable: true,
 })
 isActive: boolean  | null;

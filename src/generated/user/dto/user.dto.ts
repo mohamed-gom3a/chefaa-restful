@@ -1,20 +1,28 @@
 
-import {Gender,Country,Role} from '@prisma/client'
+import {Country,Gender,Role} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
 
 
 export class UserDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 email: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 password: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 name: string  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 address: string  | null;
@@ -26,16 +34,19 @@ address: string  | null;
 phone: number  | null;
 @ApiProperty({
   enum: Gender,
+  enumName: 'Gender',
   nullable: true,
 })
 gender: Gender  | null;
 @ApiProperty({
   enum: Country,
+  enumName: 'Country',
   nullable: true,
 })
 country: Country  | null;
 @ApiProperty({
   enum: Role,
+  enumName: 'Role',
 })
 role: Role ;
 @ApiProperty({

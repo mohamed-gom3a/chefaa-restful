@@ -4,20 +4,29 @@ import {User} from '../../user/entities/user.entity'
 
 
 export class UserTokens {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   type: () => User,
   required: false,
 })
 user?: User ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 userId: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 refreshToken: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 family: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 browserInfo: string  | null;

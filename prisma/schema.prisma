@@ -388,7 +388,6 @@ model User {
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
-  Purchase      Purchase[]
   UserTokens    UserTokens[]
   orders        Order[]
   carts         Cart[]

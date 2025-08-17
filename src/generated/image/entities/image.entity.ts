@@ -4,9 +4,13 @@ import {Prescription} from '../../prescription/entities/prescription.entity'
 
 
 export class Image {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 url: string ;
 @ApiProperty({
   type: 'string',
@@ -20,6 +24,7 @@ createdAt: Date ;
 })
 prescription?: Prescription  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 prescriptionId: string  | null;

@@ -7,18 +7,21 @@ import {IsDateString,IsOptional,IsString} from 'class-validator'
 
 export class UpdateUserTokensDto {
   @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 refreshToken?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 family?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

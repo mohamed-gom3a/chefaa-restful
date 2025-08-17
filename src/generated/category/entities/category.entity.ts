@@ -10,9 +10,12 @@ export class Category {
   format: 'int32',
 })
 id: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 name: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 image: string  | null;

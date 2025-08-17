@@ -6,7 +6,9 @@ import {IsNotEmpty,IsString} from 'class-validator'
 
 
 export class ConnectCartDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 id: string ;

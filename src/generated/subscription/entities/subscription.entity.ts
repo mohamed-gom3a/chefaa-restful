@@ -12,6 +12,7 @@ export class Subscription {
 id: number ;
 @ApiProperty({
   enum: IntervalType,
+  enumName: 'IntervalType',
 })
 intervalType: IntervalType ;
 @ApiProperty({
@@ -32,6 +33,7 @@ lastRefillDate: Date  | null;
 })
 endDate: Date  | null;
 @ApiProperty({
+  type: 'boolean',
   nullable: true,
 })
 isActive: boolean  | null;
@@ -45,6 +47,8 @@ createdAt: Date ;
   required: false,
 })
 user?: User ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 userId: string ;
 }

@@ -8,17 +8,21 @@ import {IsDateString,IsDecimal,IsNotEmpty,IsString} from 'class-validator'
 
 export class CreatePaymentDto {
   @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 @IsNotEmpty()
 @IsDecimal()
 amount: Prisma.Decimal ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 method: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 transactionId: string ;

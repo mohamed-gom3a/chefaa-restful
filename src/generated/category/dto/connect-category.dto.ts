@@ -10,14 +10,13 @@ export class ConnectCategoryDto {
   type: 'integer',
   format: 'int32',
   required: false,
-  nullable: true,
 })
 @IsOptional()
 @IsInt()
 id?: number ;
 @ApiProperty({
+  type: 'string',
   required: false,
-  nullable: true,
 })
 @IsOptional()
 @IsString()

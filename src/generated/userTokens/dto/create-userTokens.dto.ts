@@ -6,15 +6,20 @@ import {IsDateString,IsNotEmpty,IsOptional,IsString} from 'class-validator'
 
 
 export class CreateUserTokensDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 refreshToken: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 family: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

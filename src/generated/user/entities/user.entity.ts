@@ -1,7 +1,6 @@
 
-import {Gender,Country,Role} from '@prisma/client'
+import {Country,Gender,Role} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {Purchase} from '../../purchase/entities/purchase.entity'
 import {UserTokens} from '../../userTokens/entities/userTokens.entity'
 import {Order} from '../../order/entities/order.entity'
 import {Cart} from '../../cart/entities/cart.entity'
@@ -13,17 +12,25 @@ import {Subscription} from '../../subscription/entities/subscription.entity'
 
 
 export class User {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 email: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 password: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 name: string  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 address: string  | null;
@@ -35,16 +42,19 @@ address: string  | null;
 phone: number  | null;
 @ApiProperty({
   enum: Gender,
+  enumName: 'Gender',
   nullable: true,
 })
 gender: Gender  | null;
 @ApiProperty({
   enum: Country,
+  enumName: 'Country',
   nullable: true,
 })
 country: Country  | null;
 @ApiProperty({
   enum: Role,
+  enumName: 'Role',
 })
 role: Role ;
 @ApiProperty({
@@ -57,12 +67,6 @@ createdAt: Date ;
   format: 'date-time',
 })
 updatedAt: Date ;
-@ApiProperty({
-  type: () => Purchase,
-  isArray: true,
-  required: false,
-})
-Purchase?: Purchase[] ;
 @ApiProperty({
   type: () => UserTokens,
   isArray: true,

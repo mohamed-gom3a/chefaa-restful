@@ -9,19 +9,23 @@ export class MedicationDto {
   format: 'int32',
 })
 id: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 name: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 urlName: string  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 description: string  | null;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 price: Prisma.Decimal ;
 @ApiProperty({
@@ -45,6 +49,7 @@ updatedAt: Date ;
 })
 sellingCount: number ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 image: string  | null;

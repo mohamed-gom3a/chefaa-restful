@@ -1,7 +1,7 @@
 
 import {DeliveryStatus} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {IsDateString,IsNumber,IsOptional,IsString} from 'class-validator'
+import {IsDateString,IsEnum,IsNumber,IsOptional,IsString} from 'class-validator'
 
 
 
@@ -9,12 +9,15 @@ import {IsDateString,IsNumber,IsOptional,IsString} from 'class-validator'
 export class CreateDeliveryDto {
   @ApiProperty({
   enum: DeliveryStatus,
+  enumName: 'DeliveryStatus',
   required: false,
   nullable: true,
 })
 @IsOptional()
+@IsEnum(DeliveryStatus)
 deliveryStatus?: DeliveryStatus  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -22,6 +25,7 @@ deliveryStatus?: DeliveryStatus  | null;
 @IsString()
 trackingNumber?: string  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

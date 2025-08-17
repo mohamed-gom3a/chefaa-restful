@@ -1,20 +1,23 @@
 
-import {Prisma,CartStatus} from '@prisma/client'
+import {CartStatus,Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
 import {User} from '../../user/entities/user.entity'
 import {CartItem} from '../../cartItem/entities/cartItem.entity'
 
 
 export class Cart {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 totalPrice: Prisma.Decimal ;
 @ApiProperty({
   enum: CartStatus,
+  enumName: 'CartStatus',
 })
 cartStatus: CartStatus ;
 @ApiProperty({
@@ -32,7 +35,9 @@ updatedAt: Date ;
   required: false,
 })
 user?: User ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 userId: string ;
 @ApiProperty({
   type: () => CartItem,

@@ -7,18 +7,21 @@ import {IsNumber,IsOptional,IsString} from 'class-validator'
 
 export class UpdateAddressDto {
   @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 city?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 streetName?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -26,6 +29,7 @@ streetName?: string ;
 @IsString()
 buildingNo?: string  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -33,6 +37,7 @@ buildingNo?: string  | null;
 @IsString()
 floor?: string  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -40,6 +45,7 @@ floor?: string  | null;
 @IsString()
 apartment?: string  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

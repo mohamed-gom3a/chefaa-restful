@@ -5,9 +5,12 @@ import {Medication} from '../../medication/entities/medication.entity'
 
 
 export class Prescription {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 description: string  | null;

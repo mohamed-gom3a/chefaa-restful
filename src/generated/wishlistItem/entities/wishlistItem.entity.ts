@@ -5,7 +5,9 @@ import {Medication} from '../../medication/entities/medication.entity'
 
 
 export class WishlistItem {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   type: 'string',
@@ -17,7 +19,9 @@ createdAt: Date ;
   required: false,
 })
 user?: User ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 userId: string ;
 @ApiProperty({
   type: () => Medication,

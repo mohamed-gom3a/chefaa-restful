@@ -7,6 +7,7 @@ import {IsNumber,IsOptional,IsString} from 'class-validator'
 
 export class CreatePickupDto {
   @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

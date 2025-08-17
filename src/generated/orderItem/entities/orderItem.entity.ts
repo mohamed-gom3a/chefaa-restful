@@ -6,11 +6,13 @@ import {Medication} from '../../medication/entities/medication.entity'
 
 
 export class OrderItem {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 price: Prisma.Decimal ;
 @ApiProperty({
@@ -19,8 +21,8 @@ price: Prisma.Decimal ;
 })
 quantity: number ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 discountAmount: Prisma.Decimal ;
 @ApiProperty({
@@ -28,7 +30,9 @@ discountAmount: Prisma.Decimal ;
   required: false,
 })
 order?: Order ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 orderId: string ;
 @ApiProperty({
   type: () => Medication,

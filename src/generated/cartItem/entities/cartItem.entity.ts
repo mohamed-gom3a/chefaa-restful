@@ -6,11 +6,13 @@ import {Cart} from '../../cart/entities/cart.entity'
 
 
 export class CartItem {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 price: Prisma.Decimal ;
 @ApiProperty({
@@ -33,6 +35,8 @@ medicationId: number ;
   required: false,
 })
 cart?: Cart ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 cartId: string ;
 }

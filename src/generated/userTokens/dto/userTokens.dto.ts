@@ -3,13 +3,20 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class UserTokensDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 refreshToken: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 family: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 browserInfo: string  | null;

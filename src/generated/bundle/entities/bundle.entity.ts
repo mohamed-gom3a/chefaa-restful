@@ -9,9 +9,12 @@ export class Bundle {
   format: 'int32',
 })
 id: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 name: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 description: string  | null;

@@ -4,7 +4,9 @@ import {IsInt,IsNotEmpty,IsOptional,IsString,ValidateNested} from 'class-validat
 import {Type} from 'class-transformer'
 
 export class WishlistItemUserIdMedicationIdUniqueInputDto {
-    @ApiProperty()
+    @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 userId: string ;
@@ -20,8 +22,8 @@ medicationId: number ;
 @ApiExtraModels(WishlistItemUserIdMedicationIdUniqueInputDto)
 export class ConnectWishlistItemDto {
   @ApiProperty({
+  type: 'string',
   required: false,
-  nullable: true,
 })
 @IsOptional()
 @IsString()
@@ -29,7 +31,6 @@ id?: string ;
 @ApiProperty({
   type: WishlistItemUserIdMedicationIdUniqueInputDto,
   required: false,
-  nullable: true,
 })
 @IsOptional()
 @ValidateNested()

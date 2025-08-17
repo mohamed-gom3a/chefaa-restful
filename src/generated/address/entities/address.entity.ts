@@ -10,23 +10,31 @@ export class Address {
   format: 'int32',
 })
 id: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 city: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 streetName: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 buildingNo: string  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 floor: string  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 apartment: string  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 landmark: string  | null;
@@ -44,9 +52,12 @@ lat: number  | null;
 lng: number  | null;
 @ApiProperty({
   enum: AddressType,
+  enumName: 'AddressType',
 })
 addressType: AddressType ;
-@ApiProperty()
+@ApiProperty({
+  type: 'boolean',
+})
 isDefault: boolean ;
 @ApiProperty({
   type: 'string',
@@ -58,6 +69,8 @@ createdAt: Date ;
   required: false,
 })
 user?: User ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 userId: string ;
 }

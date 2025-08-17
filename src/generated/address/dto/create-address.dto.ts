@@ -6,15 +6,20 @@ import {IsNotEmpty,IsNumber,IsOptional,IsString} from 'class-validator'
 
 
 export class CreateAddressDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 city: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 streetName: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -22,6 +27,7 @@ streetName: string ;
 @IsString()
 buildingNo?: string  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -29,6 +35,7 @@ buildingNo?: string  | null;
 @IsString()
 floor?: string  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -36,6 +43,7 @@ floor?: string  | null;
 @IsString()
 apartment?: string  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

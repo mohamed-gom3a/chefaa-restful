@@ -6,7 +6,9 @@ import {IsInt,IsNotEmpty,IsString} from 'class-validator'
 
 
 export class CreateCreditCardDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 last4: string ;
@@ -24,7 +26,9 @@ expiryMonth: number ;
 @IsNotEmpty()
 @IsInt()
 expiryYear: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 token: string ;

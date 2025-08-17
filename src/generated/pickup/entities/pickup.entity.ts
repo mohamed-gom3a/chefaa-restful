@@ -5,13 +5,17 @@ import {Order} from '../../order/entities/order.entity'
 
 
 export class Pickup {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   enum: PickupStatus,
+  enumName: 'PickupStatus',
 })
 pickupStatus: PickupStatus ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 pharmacyAddress: string  | null;
@@ -32,6 +36,8 @@ pharmacyLng: number  | null;
   required: false,
 })
 order?: Order ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 orderId: string ;
 }
