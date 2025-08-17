@@ -5,6 +5,7 @@ import { CreateMedicationDto as GeneratedDto } from 'src/generated/medication/dt
 
 export class CreateMedicationDto extends OmitType(GeneratedDto, [
   'price',
+  'image',
 ] as const) {
   @ApiProperty()
   @IsNotEmpty()
