@@ -422,52 +422,6 @@ model UserTokens {
   @@index([userId, expiresAt])
 }
 
-model Product {
-  id                 String        @id @default(uuid())
-  name               String        @unique
-  urlName            String        @unique
-  picture            String?
-  basePrice          Decimal       @db.Decimal(10, 2)
-  discountPercentage Int           @default(0)
-  stock              Int           @default(0)
-  description        String?
-  createdAt          DateTime      @default(now())
-  categories         OldCategory[]
-  Purchase           Purchase[]
-
-  @@index([basePrice, stock])
-  @@index([discountPercentage, stock])
-  @@index([createdAt])
-}
-
-model OldCategory {
-  id       String    @id @default(uuid())
-  name     String    @unique
-  products Product[]
-}
-
-model Purchase {
-  id String @id @default(uuid())
-
-  user   User?   @relation(fields: [userId], references: [id], onDelete: SetNull)
-  userId String?
-
-  product   Product @relation(fields: [productId], references: [id])
-  productId String
-
-  amount        Int      @default(1)
-  totalPrice    Decimal  @db.Decimal(10, 2)
-  reviewNote    Int?
-  reviewComment String?
-  createdAt     DateTime @default(now())
-
-  @@index([userId])
-  @@index([productId])
-  @@index([reviewNote])
-  @@index([userId, productId])
-  @@index([productId, createdAt])
-}
-
 enum Role {
   USER
   PHARMACIST
