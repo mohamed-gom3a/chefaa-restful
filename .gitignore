@@ -2,6 +2,11 @@
 /dist
 /node_modules
 /docs
+/build
+
+# env
+.env
+.env.*
 
 # Temporary files
 /tmp

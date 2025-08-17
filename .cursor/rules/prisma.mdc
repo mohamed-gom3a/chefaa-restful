@@ -1,0 +1,467 @@
+---
+description: Prisma ORM patterns, standard select fields, where conditions, and performance optimization
+globs: **/*.ts
+alwaysApply: false
+---
+# Prisma ORM Patterns & Best Practices
+
+This rule defines standard patterns for Prisma ORM usage in the NestJS RESTful API.
+
+## Prisma Commands
+
+### Schema Management
+```bash
+# Format the schema
+pnpm prisma format
+
+# Validate the schema
+pnpm prisma validate
+
+# Generate TypeScript client
+pnpm prisma generate
+
+# Create and apply migration
+pnpm prisma migrate dev --name <migration_name>
+
+# Run Prisma Studio
+pnpm prisma studio
+```
+
+### Development Workflow
+1. **Format schema** after manual edits: `pnpm prisma format`
+2. **Validate schema** before generating: `pnpm prisma validate`
+3. **Generate client** after schema changes: `pnpm prisma generate`
+4. **Create migration** for database changes: `pnpm prisma migrate dev --name <descriptive_name>`
+5. **Open Studio** for database management: `pnpm prisma studio`
+
+### Migration Best Practices
+- Use descriptive migration names (e.g., `add_user_table`, `update_product_schema`)
+- Always validate schema before creating migrations
+- Test migrations in development before applying to production
+- Use `pnpm prisma migrate reset` to reset development database
+
+## Standard Select Fields
+
+### User Entity
+```typescript
+// Standard user select (without password)
+const userSelect = {
+  id: true,
+  email: true,
+  name: true,
+  address: true,
+  phone: true,
+  gender: true,
+  country: true,
+  role: true,
+  createdAt: true,
+  updatedAt: true,
+} as const;
+
+// User with password (for authentication)
+const userWithPasswordSelect = {
+  ...userSelect,
+  password: true,
+} as const;
+```
+
+### Medication Entity
+```typescript
+const medicationSelect = {
+  id: true,
+  name: true,
+  urlName: true,
+  description: true,
+  price: true,
+  stock: true,
+  createdAt: true,
+  updatedAt: true,
+  sellingCount: true,
+  image: true,
+  categoryId: true,
+  bundleId: true,
+} as const;
+```
+
+### Category Entity
+```typescript
+const categorySelect = {
+  id: true,
+  name: true,
+  image: true,
+  superCategoryId: true,
+} as const;
+```
+
+## Common Where Conditions
+
+### Search Patterns
+```typescript
+// Case-insensitive name search
+const nameSearch = {
+  name: { 
+    contains: searchTerm, 
+    mode: 'insensitive' 
+  }
+};
+
+// Email search (case-insensitive)
+const emailSearch = {
+  email: { 
+    equals: email.toLowerCase(), 
+    mode: 'insensitive' 
+  }
+};
+
+// Price range filtering
+const priceRange = {
+  price: {
+    gte: minPrice,
+    lte: maxPrice,
+  }
+};
+```
+
+### Status & Active Filters
+```typescript
+// Active items only
+const activeOnly = { active: true };
+
+// Non-null category
+const hasCategory = { categoryId: { not: null } };
+
+// In stock items
+const inStock = { stock: { gt: 0 } };
+```
+
+### Date Range Filters
+```typescript
+// Recent items
+const recentItems = {
+  createdAt: {
+    gte: new Date(Date.now() - 30 * 24 * 60 * 60 * 1000) // Last 30 days
+  }
+};
+
+// Expired tokens
+const expiredTokens = {
+  expiresAt: { lt: new Date() }
+};
+```
+
+## Performance Optimization Patterns
+
+### Pagination with Count
+```typescript
+// Efficient pagination with total count
+async findAll(findDto: FindDto) {
+  const { page, offset, skip, ...filters } = findDto;
+  
+  const whereClause = this.buildWhereClause(filters);
+  
+  const [items, total] = await Promise.all([
+    this.prisma.model.findMany({
+      skip,
+      take: offset,
+      where: whereClause,
+      include: { relation: { select: { name: true } } },
+      orderBy: { createdAt: 'desc' },
+    }),
+    this.prisma.model.count({ where: whereClause }),
+  ]);
+  
+  return BasePaginationDto.paginate(items, total, offset, page);
+}
+```
+
+### Selective Includes
+```typescript
+// Include only necessary relations
+const withCategory = {
+  include: { 
+    category: { 
+      select: { name: true } 
+    } 
+  }
+};
+
+const withSuperCategory = {
+  include: {
+    superCategory: { 
+      select: { name: true } 
+    }
+  }
+};
+```
+
+### Efficient Updates
+```typescript
+// Update with select to return updated data
+const updateWithSelect = {
+  where: { id },
+  data: updateData,
+  select: standardSelect,
+};
+
+// Upsert pattern
+const upsertPattern = {
+  where: { uniqueField },
+  update: updateData,
+  create: createData,
+};
+```
+
+## Repository Pattern Implementation
+
+### Base Repository Methods
+```typescript
+@Injectable()
+export class BaseRepo<T> {
+  constructor(
+    private readonly prisma: PrismaService,
+    private readonly model: Prisma.ModelName
+  ) {}
+
+  async findById(id: string | number): Promise<T> {
+    return this.prisma[this.model].findUnique({
+      where: { id },
+      select: this.standardSelect,
+    });
+  }
+
+  async findByUniqueField(field: string, value: any): Promise<T> {
+    return this.prisma[this.model].findUnique({
+      where: { [field]: value },
+      select: this.standardSelect,
+    });
+  }
+
+  async create(data: any): Promise<T> {
+    return this.prisma[this.model].create({
+      data,
+      select: this.standardSelect,
+    });
+  }
+
+  async update(id: string | number, data: any): Promise<T> {
+    return this.prisma[this.model].update({
+      where: { id },
+      data,
+      select: this.standardSelect,
+    });
+  }
+
+  async delete(id: string | number): Promise<T> {
+    return this.prisma[this.model].delete({
+      where: { id },
+      select: this.standardSelect,
+    });
+  }
+}
+```
+
+## Error Handling Patterns
+
+### Prisma Exception Handling
+```typescript
+// Standard Prisma error handling
+try {
+  return await this.prisma.model.operation();
+} catch (error) {
+  if (error instanceof PrismaClientKnownRequestError) {
+    switch (error.code) {
+      case 'P2002': // Unique constraint violation
+        throw new UniqueConstraintException();
+      case 'P2025': // Record not found
+        throw new NotFoundException();
+      case 'P2003': // Foreign key constraint violation
+        throw new ForeignKeyConstraintException();
+      default:
+        throw error;
+    }
+  }
+  throw error;
+}
+```
+
+### Custom Error Messages
+```typescript
+// Specific error handling for different models
+const handlePrismaError = (error: PrismaClientKnownRequestError, model: string) => {
+  switch (error.code) {
+    case 'P2002':
+      if (error.meta?.target?.includes('email')) {
+        throw new EmailInUseException();
+      }
+      if (error.meta?.target?.includes('name')) {
+        throw new NameInUseException();
+      }
+      break;
+    case 'P2025':
+      throw new `${model}NotFoundException`();
+    default:
+      throw error;
+  }
+};
+```
+
+## Query Optimization
+
+### Index Usage
+```typescript
+// Use indexed fields for filtering
+const indexedQuery = {
+  where: {
+    // Use indexed fields from schema
+    email: email,           // @@index([email])
+    categoryId: categoryId, // @@index([categoryId])
+    stock: { gt: 0 },       // @@index([stock])
+  }
+};
+```
+
+### Compound Queries
+```typescript
+// Efficient compound queries
+const compoundQuery = {
+  where: {
+    AND: [
+      { categoryId },
+      { stock: { gt: 0 } },
+      { price: { gte: minPrice, lte: maxPrice } }
+    ]
+  }
+};
+```
+
+### Batch Operations
+```typescript
+// Batch create
+const batchCreate = await this.prisma.model.createMany({
+  data: items,
+  skipDuplicates: true,
+});
+
+// Batch update
+const batchUpdate = await this.prisma.model.updateMany({
+  where: { condition },
+  data: { field: newValue },
+});
+```
+
+## Transaction Patterns
+
+### Simple Transactions
+```typescript
+// Basic transaction
+const result = await this.prisma.$transaction(async (tx) => {
+  const created = await tx.model.create({ data });
+  const updated = await tx.relatedModel.update({
+    where: { id: created.id },
+    data: { status: 'ACTIVE' }
+  });
+  return updated;
+});
+```
+
+### Complex Transactions
+```typescript
+// Multi-step transaction
+const complexTransaction = async (data: any) => {
+  return this.prisma.$transaction(async (tx) => {
+    // Step 1: Create main record
+    const main = await tx.model.create({ data: data.main });
+    
+    // Step 2: Create related records
+    const related = await Promise.all(
+      data.related.map(item => 
+        tx.relatedModel.create({ 
+          data: { ...item, mainId: main.id } 
+        })
+      )
+    );
+    
+    // Step 3: Update status
+    const updated = await tx.model.update({
+      where: { id: main.id },
+      data: { status: 'COMPLETED' }
+    });
+    
+    return { main: updated, related };
+  });
+};
+```
+
+## Common Anti-Patterns to Avoid
+
+### ❌ N+1 Queries
+```typescript
+// Bad: N+1 query problem
+const items = await this.prisma.model.findMany();
+for (const item of items) {
+  const relation = await this.prisma.relation.findUnique({
+    where: { id: item.relationId }
+  });
+}
+```
+
+### ✅ Efficient with Include
+```typescript
+// Good: Single query with include
+const items = await this.prisma.model.findMany({
+  include: { relation: true }
+});
+```
+
+### ❌ Unnecessary Selects
+```typescript
+// Bad: Selecting all fields
+const user = await this.prisma.user.findUnique({
+  where: { id },
+  select: { id: true, email: true, password: true, name: true, ... }
+});
+```
+
+### ✅ Minimal Selects
+```typescript
+// Good: Select only needed fields
+const user = await this.prisma.user.findUnique({
+  where: { id },
+  select: { id: true, email: true, name: true }
+});
+```
+
+## Testing Patterns
+
+### Mock Prisma Service
+```typescript
+const PrismaServiceMock = {
+  provide: PrismaService,
+  useValue: {
+    model: {
+      findUnique: jest.fn(),
+      findMany: jest.fn(),
+      create: jest.fn(),
+      update: jest.fn(),
+      delete: jest.fn(),
+      count: jest.fn(),
+    },
+  },
+};
+```
+
+### Test Data Setup
+```typescript
+// Setup test data
+const testData = [
+  { id: '1', name: 'Test 1', email: 'test1@example.com' },
+  { id: '2', name: 'Test 2', email: 'test2@example.com' },
+];
+
+// Mock implementation
+findMany: jest.fn().mockResolvedValue(testData),
+findUnique: jest.fn().mockImplementation(({ where }) => 
+  testData.find(item => item.id === where.id)
+),
+```
+

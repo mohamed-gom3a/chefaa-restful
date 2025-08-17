@@ -1,0 +1,193 @@
+---
+alwaysApply: true
+---
+# Project Structure Guide
+
+This NestJS RESTful API follows a modular architecture with clear separation of concerns.
+
+## Root Directory Structure
+
+```
+nest-restful/
+├── .cursor/                    # Cursor IDE configuration
+│   ├── rules/                  # Cursor rules and guidelines
+│   └── todo.md                 # Project TODO items
+├── .github/                    # GitHub workflows and templates
+├── assets/                     # Static assets and documentation
+├── dist/                       # Compiled output (generated)
+├── node_modules/               # Dependencies (generated)
+├── prisma/                     # Database schema and migrations
+├── src/                        # Source code
+├── test/                       # End-to-end tests
+├── tmp/                        # Temporary files
+├── uploads/                    # File upload storage
+├── .gitignore                  # Git ignore patterns
+├── .prettierrc                 # Prettier configuration
+├── eslint.config.mjs           # ESLint configuration
+├── jest-all.json               # Jest test configuration
+├── LICENSE.md                  # Project license
+├── nest-cli.json               # NestJS CLI configuration
+├── package.json                # Project dependencies and scripts
+├── README.md                   # Project documentation
+├── tsconfig.json               # TypeScript configuration
+├── tsconfig.build.json         # TypeScript build configuration
+└── yarn.lock                   # Yarn lock file
+```
+
+## Source Code Structure (`src/`)
+
+### Core Application Files
+- `main.ts` - Application entry point and bootstrap
+- `app.module.ts` - Root application module
+
+### Authentication (`auth/`)
+- `auth.controller.ts` - Authentication endpoints
+- `access-jwt-auth.guard.ts` - JWT authentication guard
+- `access-jwt.strategy.ts` - JWT strategy implementation
+- `dto/` - Authentication data transfer objects
+- `exceptions/` - Authentication-specific exceptions
+- `types/` - Authentication type definitions
+
+### Common Utilities (`common/`)
+- `decorators/` - Custom decorators (file upload, admin check)
+- `dtos/` - Shared data transfer objects
+- `exceptions/` - Domain-specific exceptions by category
+- `guards/` - Custom guards (roles)
+- `interceptors/` - Global interceptors and exception handlers
+- `types/` - Shared type definitions
+
+### Configuration (`config/`)
+- `hash.config.ts` - Password hashing configuration
+- `jwt.config.ts` - JWT token configuration
+- `multer-upload.config.ts` - File upload configuration
+
+### Database (`prisma/`)
+- `prisma.module.ts` - Prisma module configuration
+- `prisma.service.ts` - Prisma service implementation
+
+### Business Models (`models/`)
+Each model follows a consistent structure:
+- `{model}.controller.ts` - REST endpoints
+- `{model}.module.ts` - Module configuration
+- `{model}.repo.ts` - Repository layer
+- `dto/` - Model-specific DTOs
+- `entities/` - Model entities (if applicable)
+- `exceptions/` - Model-specific exceptions
+
+Current models:
+- `category/` - Product categories
+- `medication/` - Medication management
+- `user/` - User management
+
+### Generated Code (`generated/`)
+Auto-generated Prisma client code for all database entities:
+- `address/` - User addresses
+- `bundle/` - Product bundles
+- `cart/` - Shopping cart
+- `cartItem/` - Cart items
+- `category/` - Categories
+- `coupon/` - Discount coupons
+- `creditCard/` - Payment methods
+- `delivery/` - Delivery information
+- `deliveryOption/` - Delivery options
+- `image/` - Product images
+- `medication/` - Medications
+- `notification/` - User notifications
+- `offer/` - Special offers
+- `oldCategory/` - Legacy categories
+- `order/` - Customer orders
+- `orderItem/` - Order items
+- `payment/` - Payment records
+- `pickup/` - Pickup options
+- `prescription/` - Prescriptions
+- `product/` - Products
+- `purchase/` - Purchase records
+- `subscription/` - Subscriptions
+- `superCategory/` - Super categories
+- `user/` - Users
+- `userTokens/` - User authentication tokens
+- `wishlistItem/` - Wishlist items
+
+### Utilities (`util/`)
+- `getTokenExpirationDate.ts` - Token expiration utilities
+
+## Database Structure (`prisma/`)
+
+- `schema.prisma` - Database schema definition
+- `migrations/` - Database migration files
+- `migration_lock.toml` - Migration lock file
+
+## Testing (`test/`)
+
+- `auth.e2e-spec.ts` - Authentication end-to-end tests
+- `category.e2e-spec.ts` - Category end-to-end tests
+- `jest-e2e.json` - E2E test configuration
+- Additional test files for other modules
+
+## Important Configuration Files
+
+### Package Management
+- `package.json` - Dependencies, scripts, and project metadata
+- `yarn.lock` - Yarn dependency lock file
+- `pnpm-lock.yaml` - PNPM dependency lock file
+
+### Code Quality
+- `eslint.config.mjs` - ESLint rules and configuration
+- `.prettierrc` - Code formatting rules
+- `tsconfig.json` - TypeScript compiler options
+
+### Testing
+- `jest-all.json` - Jest test runner configuration
+- `nest-cli.json` - NestJS CLI configuration
+
+## File Organization Guidelines
+
+### Model Structure Pattern
+Each business model should follow this structure:
+```
+models/{model}/
+├── {model}.controller.ts
+├── {model}.module.ts
+├── {model}.repo.ts
+├── dto/
+│   ├── create-{model}.dto.ts
+│   ├── update-{model}.dto.ts
+│   └── find-{model}s.dto.ts
+├── entities/
+│   └── {model}.entity.ts
+└── exceptions/
+    ├── {model}-not-found.exception.ts
+    └── {model}-name-in-use.exception.ts
+```
+
+### Generated Code
+- Never manually edit files in `src/generated/`
+- All generated code comes from Prisma schema
+- Regenerate after schema changes: `npx prisma generate`
+
+### Common Patterns
+- Use kebab-case for file names
+- Group related functionality in modules
+- Keep controllers thin, business logic in services
+- Use DTOs for data validation
+- Implement proper exception handling
+- Follow NestJS dependency injection patterns
+
+## Key Files to Know
+
+### Entry Points
+- `src/main.ts` - Application bootstrap
+- `src/app.module.ts` - Root module configuration
+
+### Database
+- `prisma/schema.prisma` - Database schema
+- `src/prisma/prisma.service.ts` - Database service
+
+### Authentication
+- `src/auth/auth.controller.ts` - Auth endpoints
+- `src/auth/access-jwt.strategy.ts` - JWT strategy
+
+### Configuration
+- `src/config/` - All configuration files
+- `package.json` - Project configuration
+

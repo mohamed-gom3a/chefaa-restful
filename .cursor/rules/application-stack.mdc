@@ -1,0 +1,213 @@
+---
+description: Application stack, dependencies, and versions for NestJS RESTful API
+globs: **/*
+alwaysApply: false
+---
+# Application Stack & Dependencies
+
+This NestJS RESTful API uses a modern TypeScript stack with comprehensive tooling.
+
+## Core Framework
+
+### NestJS Ecosystem
+- **@nestjs/core**: `^8.4.6` - Core NestJS framework
+- **@nestjs/common**: `^8.4.6` - Common utilities and decorators
+- **@nestjs/platform-express**: `^8.4.6` - Express.js integration
+- **@nestjs/cli**: `^8.2.6` - NestJS command line tools
+- **@nestjs/schematics**: `^8.0.11` - Code generation schematics
+
+### Authentication & Security
+- **@nestjs/jwt**: `^8.0.1` - JWT token handling
+- **@nestjs/passport**: `^8.2.1` - Passport.js integration
+- **passport**: `^0.6.0` - Authentication middleware
+- **passport-jwt**: `^4.0.0` - JWT strategy for Passport
+- **bcrypt**: `^5.0.1` - Password hashing
+
+### Database & ORM
+- **@prisma/client**: `^4.16.0` - Prisma ORM client
+- **prisma**: `^4.16.0` - Database toolkit
+- **prisma-error-enum**: `^0.1.2` - Prisma error handling
+
+### API Documentation
+- **@nestjs/swagger**: `^5.2.1` - OpenAPI/Swagger documentation
+- **swagger-ui-express**: `^4.4.0` - Swagger UI for Express
+
+### Data Validation & Transformation
+- **class-validator**: `^0.13.2` - Decorator-based validation
+- **class-transformer**: `^0.5.1` - Object transformation
+- **@nestjs/mapped-types**: `*` - Type mapping utilities
+
+### File Handling
+- **multer**: `^2.0.2` - Multipart form data handling
+
+### Utilities
+- **rxjs**: `^7.2.0` - Reactive programming library
+- **reflect-metadata**: `^0.1.13` - Metadata reflection
+- **uuid**: `^8.3.2` - UUID generation
+- **currency.js**: `^2.0.4` - Currency formatting
+- **ms**: `^2.1.3` - Time conversion utilities
+- **rimraf**: `^3.0.2` - Cross-platform rm -rf
+
+## Development Dependencies
+
+### TypeScript & Build Tools
+- **typescript**: `4.9.5` - TypeScript compiler
+- **ts-node**: `^10.8.1` - TypeScript execution
+- **ts-loader**: `^9.3.0` - Webpack TypeScript loader
+- **tsconfig-paths**: `^4.0.0` - TypeScript path mapping
+- **esbuild**: `^0.14.42` - Fast JavaScript bundler
+
+### Testing Framework
+- **jest**: `^28.1.1` - Testing framework
+- **@nestjs/testing**: `^8.4.6` - NestJS testing utilities
+- **supertest**: `^6.2.3` - HTTP testing
+- **ts-jest**: `^28.0.4` - TypeScript Jest transformer
+
+### Code Quality & Linting
+- **eslint**: `^9.0.0` - JavaScript/TypeScript linter
+- **@eslint/js**: `^9.33.0` - ESLint JavaScript rules
+- **typescript-eslint**: `^8.39.1` - TypeScript ESLint rules
+- **eslint-plugin-prettier**: `^4.0.0` - Prettier ESLint integration
+- **prettier**: `^2.6.2` - Code formatter
+- **globals**: `^16.3.0` - Global variables for ESLint
+
+### Type Definitions
+- **@types/node**: `^17.0.40` - Node.js type definitions
+- **@types/express**: `^4.17.13` - Express type definitions
+- **@types/jest**: `28.1.1` - Jest type definitions
+- **@types/bcrypt**: `^5.0.0` - bcrypt type definitions
+- **@types/multer**: `^1.4.13` - multer type definitions
+- **@types/passport-jwt**: `^3.0.6` - passport-jwt type definitions
+- **@types/supertest**: `^2.0.11` - supertest type definitions
+- **@types/uuid**: `^8.3.4` - uuid type definitions
+- **@types/ms**: `^0.7.31` - ms type definitions
+
+### Documentation
+- **@compodoc/compodoc**: `^1.1.19` - NestJS documentation generator
+
+### Code Generation
+- **@brakebein/prisma-generator-nestjs-dto**: `^1.20.0` - Prisma DTO generator
+
+### Environment & Utilities
+- **dotenv-cli**: `^5.1.0` - Environment variable CLI tool
+- **source-map-support**: `^0.5.20` - Source map support
+
+## Package Management
+
+### Primary Package Manager
+- **pnpm** - Fast, disk space efficient package manager
+- Use `pnpm` for all package management operations
+- Lock file: `pnpm-lock.yaml`
+- Commands: `pnpm add`, `pnpm remove`, `pnpm install`, `pnpm run`
+
+### Package Manager Guidelines
+- Always use `pnpm` instead of npm or yarn
+- Use `pnpm add <package>` to install dependencies
+- Use `pnpm add -D <package>` for dev dependencies
+- Use `pnpm run <script>` to execute package.json scripts
+- Use `pnpm prisma <command>` for Prisma operations
+
+## Stack Architecture
+
+### Backend Framework
+- **NestJS 8.x** - Progressive Node.js framework
+- **Express.js** - Web application framework
+- **TypeScript 4.9.5** - Typed JavaScript
+
+### Database Layer
+- **Prisma 4.16.0** - Next-generation ORM
+- **Database Agnostic** - Supports PostgreSQL, MySQL, SQLite, etc.
+
+### Authentication System
+- **JWT** - JSON Web Tokens for stateless auth
+- **Passport.js** - Authentication middleware
+- **bcrypt** - Secure password hashing
+
+### API Documentation
+- **OpenAPI/Swagger** - API documentation and testing
+- **Compodoc** - NestJS documentation generator
+
+### Development Workflow
+- **ESLint + Prettier** - Code quality and formatting
+- **Jest** - Testing framework with coverage
+- **TypeScript** - Static type checking
+
+## Version Compatibility
+
+### NestJS Ecosystem
+All NestJS packages are aligned at version 8.x for compatibility:
+- Core packages: `^8.4.6`
+- CLI: `^8.2.6`
+- JWT: `^8.0.1`
+- Passport: `^8.2.1`
+
+### Prisma Version
+- Client and CLI: `^4.16.0`
+- Compatible with Prisma 4.x features
+
+### TypeScript Version
+- **4.9.5** - Stable version with full NestJS support
+- Compatible with all current dependencies
+
+## Key Features Enabled
+
+### Authentication & Authorization
+- JWT-based authentication
+- Role-based access control
+- Secure password hashing
+- Token refresh mechanism
+
+### Database Operations
+- Type-safe database queries
+- Automatic migrations
+- Database seeding
+- Connection pooling
+
+### API Development
+- RESTful endpoints
+- Request/response validation
+- File upload handling
+- Error handling middleware
+
+### Development Experience
+- Hot reloading
+- TypeScript compilation
+- Code formatting
+- Linting and testing
+- API documentation
+
+## Build & Deployment
+
+### Scripts Available
+- `build` - Production build
+- `start:dev` - Development server with hot reload
+- `start:prod` - Production server
+- `test` - Unit and integration tests
+- `test:e2e` - End-to-end tests
+- `migrate:dev` - Database migrations
+- `studio:dev` - Prisma Studio for database management
+
+### Environment Support
+- Development environment
+- Test environment
+- Production environment
+- Heroku deployment support
+
+## Security Considerations
+
+### Authentication
+- JWT token expiration
+- Refresh token rotation
+- Secure password hashing with bcrypt
+- Role-based authorization
+
+### Data Validation
+- Input validation with class-validator
+- Type-safe database operations
+- SQL injection prevention via Prisma
+
+### File Upload
+- Multer configuration for file uploads
+- File type validation
+- Size limits enforcement
+

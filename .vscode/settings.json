@@ -1,0 +1,15 @@
+{
+    "windowColor.mainColor": "#03dd03",
+    "window.title": "${activeRepositoryBranchName}",
+    "workbench.colorCustomizations": {
+        "editor.background": "#161821",
+        "sideBar.background": "#161821"
+    },
+    "windowColor.name": "${activeRepositoryBranchName}",
+    "windowColor.isActivityBarColored": false,
+    "windowColor.isTitleBarColored": false,
+    "windowColor.isStatusBarColored": false,
+    "windowColor.isWindowNameColored": false,
+    "windowColor.isActiveItemsColored": false,
+    "windowColor.setWindowTitle": true
+}

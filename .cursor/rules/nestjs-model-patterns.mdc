@@ -1,0 +1,638 @@
+---
+description: NestJS model architecture patterns, conventions, and code style for RESTful APIs
+globs: src/models/**/*
+alwaysApply: false
+---
+# NestJS Model Architecture Patterns
+
+This rule defines the standard patterns and conventions for NestJS model modules in the RESTful API.
+
+## Module Structure
+
+### Required Files
+Every model module must include these files:
+- `{model}.controller.ts` - REST endpoints
+- `{model}.service.ts` - Business logic
+- `{model}.repo.ts` - Database operations
+- `{model}.module.ts` - Module configuration
+- `dto/` - Data transfer objects
+- `exceptions/` - Custom exceptions
+
+### Directory Structure
+```
+models/{model}/
+├── {model}.controller.ts
+├── {model}.service.ts
+├── {model}.repo.ts
+├── {model}.module.ts
+├── dto/
+│   ├── create-{model}.dto.ts
+│   └── find-{model}s.dto.ts
+└── exceptions/
+    ├── {model}-service-input.exception.ts
+    └── create-{model}-failed.exception.ts
+```
+
+## Controller Patterns
+
+### Import Organization
+```typescript
+// ✅ Good: Organized imports
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  HttpCode,
+  HttpStatus,
+  Param,
+  ParseIntPipe,
+  Patch,
+  Post,
+  Query,
+  UploadedFile,
+} from '@nestjs/common';
+import { Model } from '@prisma/client';
+import { Public } from 'src/auth/public.decorator';
+import { FileUpload } from 'src/common/decorators/file-upload.decorator';
+import { IsAdmin } from 'src/common/decorators/is-admin.decorator';
+import { File } from 'src/common/types/file';
+import { ConnectModelDto } from 'src/generated/{model}/dto/connect-{model}.dto';
+import { UpdateModelDto } from 'src/generated/{model}/dto/update-{model}.dto';
+import { CreateModelDto } from './dto/create-{model}.dto';
+import { FindModelsDto } from './dto/find-{model}s.dto';
+import { ModelService } from './{model}.service';
+```
+
+### Controller Class Structure
+```typescript
+@Controller('model')
+export class ModelController {
+  constructor(private readonly modelService: ModelService) {}
+
+  @IsAdmin()
+  @Post()
+  async create(@Body() createModelDto: CreateModelDto) {
+    return this.modelService.create(createModelDto);
+  }
+
+  @Get('/id/:id')
+  async findOneById(@Param('id', ParseIntPipe) id: number) {
+    const connectModelDto: ConnectModelDto = { id };
+    return this.modelService.findOneById(connectModelDto);
+  }
+
+  @Get('/:urlName')
+  async findOneByUrlName(@Param('urlName') urlName: string) {
+    const connectModelDto: ConnectModelDto = { urlName };
+    return this.modelService.findOneByUrlName(connectModelDto);
+  }
+
+  @Public()
+  @Get()
+  async findAll(@Query() findModelsDto: FindModelsDto) {
+    return this.modelService.findAll(findModelsDto);
+  }
+
+  @IsAdmin()
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.modelService.remove(id);
+  }
+
+  @IsAdmin()
+  @Patch('/:id')
+  async update(
+    @Param('id', ParseIntPipe) id: number,
+    @Body() updateModelDto: UpdateModelDto,
+  ) {
+    return this.modelService.update(id, updateModelDto);
+  }
+
+  @IsAdmin()
+  @FileUpload()
+  @Patch(':id/image')
+  uploadPhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: File,
+  ): Promise<Model> {
+    return this.modelService.uploadPicture(id, file);
+  }
+}
+```
+
+### Route Patterns
+- **Create**: `POST /` (admin only)
+- **Find by ID**: `GET /id/:id`
+- **Find by URL name**: `GET /:urlName`
+- **Find all**: `GET /` (public)
+- **Update**: `PATCH /:id` (admin only)
+- **Delete**: `DELETE /:id` (admin only)
+- **Upload image**: `PATCH /:id/image` (admin only)
+
+## Service Patterns
+
+### Service Class Structure
+```typescript
+@Injectable()
+export class ModelService {
+  constructor(private readonly modelRepo: ModelRepo) {}
+
+  async create(createModelDto: CreateModelDto): Promise<Model> {
+    const urlName = this.formatUrlName(createModelDto.name);
+    const model = await this.modelRepo.create(createModelDto, urlName);
+    return model;
+  }
+
+  async findOneById(connectModelDto: ConnectModelDto): Promise<Model> {
+    return this.modelRepo.findOneById(connectModelDto);
+  }
+
+  async findOneByUrlName(connectModelDto: ConnectModelDto): Promise<Model> {
+    return this.modelRepo.findOneByUrlName(connectModelDto);
+  }
+
+  async findAll(findModelsDto: FindModelsDto) {
+    return this.modelRepo.findAll(findModelsDto);
+  }
+
+  private formatUrlName(name: string): string {
+    const lowerCaseUrlName = name.toLocaleLowerCase();
+    const trimmedUrlName = lowerCaseUrlName.trim();
+    const singleSpaceUrlName = trimmedUrlName.replace(/\s\s+/g, ' ');
+    const spaceToHyphenUrlName = singleSpaceUrlName.split(' ').join('-');
+    return spaceToHyphenUrlName;
+  }
+
+  async update(id: number, updateModelDto: UpdateModelDto): Promise<Model> {
+    if (updateModelDto.name) {
+      const urlName = this.formatUrlName(updateModelDto.name);
+      return this.modelRepo.update(id, { ...updateModelDto, urlName });
+    }
+    return this.modelRepo.update(id, updateModelDto);
+  }
+
+  async uploadPicture(id: number, file: File): Promise<Model> {
+    return this.modelRepo.uploadPicture(id, file);
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.modelRepo.remove(id);
+  }
+}
+```
+
+### URL Name Formatting
+```typescript
+// ✅ Good: Consistent URL name formatting
+private formatUrlName(name: string): string {
+  const lowerCaseUrlName = name.toLocaleLowerCase();
+  const trimmedUrlName = lowerCaseUrlName.trim();
+  const singleSpaceUrlName = trimmedUrlName.replace(/\s\s+/g, ' ');
+  const spaceToHyphenUrlName = singleSpaceUrlName.split(' ').join('-');
+  return spaceToHyphenUrlName;
+}
+```
+
+## Repository Patterns
+
+### Repository Class Structure
+```typescript
+@Injectable()
+export class ModelRepo {
+  constructor(private readonly prisma: PrismaService) {}
+
+  async create(createModelDto: CreateModelDto, urlName: string): Promise<Model> {
+    const { categoryId, ...modelData } = createModelDto;
+    const model = await this.prisma.model.create({
+      data: {
+        ...modelData,
+        urlName,
+        category: { connect: { id: categoryId } },
+      },
+      include: { category: { select: { name: true } } },
+    });
+    return model;
+  }
+
+  async findOneById(connectModelDto: ConnectModelDto): Promise<Model> {
+    if (!connectModelDto.id) {
+      throw new BadRequestException('ID is required for findOneById');
+    }
+    return this.prisma.model.findUniqueOrThrow({
+      where: { id: connectModelDto.id },
+      include: { category: { select: { name: true } } },
+    });
+  }
+
+  async findOneByUrlName(connectModelDto: ConnectModelDto): Promise<Model> {
+    if (!connectModelDto.urlName) {
+      throw new BadRequestException('URL name is required for findOneByUrlName');
+    }
+    return this.prisma.model.findUniqueOrThrow({
+      where: { urlName: connectModelDto.urlName },
+      include: { category: { select: { name: true } } },
+    });
+  }
+
+  async findAll(findModelsDto: FindModelsDto) {
+    const {
+      page, offset, skip, searchName, minPrice, maxPrice,
+      categoryId, bundleId, orderBy, orderDirection,
+    } = findModelsDto;
+
+    const whereClause: Prisma.ModelWhereInput = {};
+    if (searchName) {
+      whereClause.name = { contains: searchName, mode: 'insensitive' };
+    }
+    if (minPrice || maxPrice) {
+      whereClause.price = {};
+      if (minPrice) whereClause.price.gte = minPrice;
+      if (maxPrice) whereClause.price.lte = maxPrice;
+    }
+    if (categoryId) whereClause.categoryId = categoryId;
+    if (bundleId) whereClause.bundleId = bundleId;
+
+    const orderByClause: Prisma.ModelOrderByWithRelationInput = {};
+    if (orderBy) {
+      orderByClause[orderBy] = orderDirection || 'asc';
+    } else {
+      orderByClause.createdAt = 'desc';
+    }
+
+    const [models, total] = await Promise.all([
+      this.prisma.model.findMany({
+        skip, take: offset, where: whereClause,
+        include: { category: { select: { name: true } } },
+        orderBy: orderByClause,
+      }),
+      this.prisma.model.count({ where: whereClause }),
+    ]);
+    return BasePaginationDto.paginate(models, total, offset, page);
+  }
+
+  async update(id: number, updateModelDto: UpdateModelDto): Promise<Model> {
+    return this.prisma.model.update({
+      where: { id },
+      data: updateModelDto,
+      include: { category: { select: { name: true } } },
+    });
+  }
+
+  async remove(id: number): Promise<void> {
+    await this.prisma.model.delete({ where: { id } });
+  }
+
+  async uploadPicture(id: number, file: File): Promise<Model> {
+    return this.prisma.model.update({
+      where: { id },
+      data: { image: file.filename },
+      include: { category: { select: { name: true } } },
+    });
+  }
+}
+```
+
+### Query Building Patterns
+```typescript
+// ✅ Good: Dynamic where clause building
+const whereClause: Prisma.ModelWhereInput = {};
+if (searchName) {
+  whereClause.name = { contains: searchName, mode: 'insensitive' };
+}
+if (minPrice || maxPrice) {
+  whereClause.price = {};
+  if (minPrice) whereClause.price.gte = minPrice;
+  if (maxPrice) whereClause.price.lte = maxPrice;
+}
+
+// ✅ Good: Dynamic orderBy clause
+const orderByClause: Prisma.ModelOrderByWithRelationInput = {};
+if (orderBy) {
+  orderByClause[orderBy] = orderDirection || 'asc';
+} else {
+  orderByClause.createdAt = 'desc';
+}
+```
+
+## DTO Patterns
+
+### Create DTO
+```typescript
+import { ApiProperty, OmitType } from '@nestjs/swagger';
+import { Prisma } from '@prisma/client';
+import { IsInt, IsNotEmpty, IsNumber, IsOptional } from 'class-validator';
+import { CreateModelDto as GeneratedDto } from 'src/generated/{model}/dto/create-{model}.dto';
+
+export class CreateModelDto extends OmitType(GeneratedDto, [
+  'price',
+  'image',
+] as const) {
+  @ApiProperty()
+  @IsNotEmpty()
+  @IsNumber(
+    { maxDecimalPlaces: 2 },
+    { message: 'price must be a number with up to 2 decimals' },
+  )
+  price: number | Prisma.Decimal;
+
+  @ApiProperty()
+  @IsOptional()
+  @IsInt()
+  stock: number;
+
+  @ApiProperty()
+  @IsInt()
+  categoryId: number;
+}
+```
+
+### Find DTO with Enums
+```typescript
+import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
+import { IsEnum, IsNumber, IsOptional, IsString, Min } from 'class-validator';
+import { BasePaginationDto } from 'src/common/dtos/base-pagination.dto';
+
+export enum OrderDirection {
+  ASC = 'asc',
+  DESC = 'desc',
+}
+
+export enum OrderBy {
+  NAME = 'name',
+  PRICE = 'price',
+  CREATED_AT = 'createdAt',
+  UPDATED_AT = 'updatedAt',
+  SELLING_COUNT = 'sellingCount',
+}
+
+export class FindModelsDto extends BasePaginationDto {
+  @ApiProperty({
+    description: 'Search models by name',
+    required: false,
+    example: 'search term',
+  })
+  @IsOptional()
+  @IsString()
+  searchName?: string;
+
+  @ApiProperty({
+    description: 'Minimum price filter',
+    required: false,
+    example: 10.5,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  minPrice?: number;
+
+  @ApiProperty({
+    description: 'Maximum price filter',
+    required: false,
+    example: 100.0,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(0)
+  maxPrice?: number;
+
+  @ApiProperty({
+    description: 'Filter by category ID',
+    required: false,
+    example: 1,
+  })
+  @IsOptional()
+  @Type(() => Number)
+  @IsNumber()
+  @Min(1)
+  categoryId?: number;
+
+  @ApiProperty({
+    description: 'Order by field',
+    required: false,
+    enum: OrderBy,
+    example: OrderBy.NAME,
+  })
+  @IsOptional()
+  @IsEnum(OrderBy)
+  orderBy?: OrderBy;
+
+  @ApiProperty({
+    description: 'Order direction',
+    required: false,
+    enum: OrderDirection,
+    example: OrderDirection.ASC,
+  })
+  @IsOptional()
+  @IsEnum(OrderDirection)
+  orderDirection?: OrderDirection;
+}
+```
+
+## Module Configuration
+
+### Module Structure
+```typescript
+import { Module } from '@nestjs/common';
+import { MulterModule } from '@nestjs/platform-express';
+import { multerUploadConfig } from 'src/config/multer-upload.config';
+import { PrismaModule } from 'src/prisma/prisma.module';
+import { ModelController } from './{model}.controller';
+import { ModelRepo } from './{model}.repo';
+import { ModelService } from './{model}.service';
+
+@Module({
+  imports: [PrismaModule, MulterModule.register(multerUploadConfig)],
+  exports: [ModelService],
+  controllers: [ModelController],
+  providers: [ModelService, ModelRepo],
+})
+export class ModelModule {}
+```
+
+## Exception Patterns
+
+### Base Exception
+```typescript
+export class ModelServiceInputException extends Error {
+  constructor(message: string) {
+    super(message);
+  }
+}
+```
+
+### Specific Exceptions
+```typescript
+import { ModelServiceInputException } from './{model}-service-input.exception';
+
+export class CreateModelFailedException extends ModelServiceInputException {
+  constructor(message: string) {
+    super(message);
+  }
+}
+```
+
+## Common Anti-Patterns to Avoid
+
+### ❌ Direct Prisma Usage in Controllers
+```typescript
+// Bad: Controller directly using Prisma
+@Controller('model')
+export class ModelController {
+  constructor(private readonly prisma: PrismaService) {}
+  
+  @Get()
+  async findAll() {
+    return this.prisma.model.findMany(); // Direct Prisma usage
+  }
+}
+```
+
+### ✅ Proper Layered Architecture
+```typescript
+// Good: Controller uses service, service uses repository
+@Controller('model')
+export class ModelController {
+  constructor(private readonly modelService: ModelService) {}
+  
+  @Get()
+  async findAll() {
+    return this.modelService.findAll(); // Uses service layer
+  }
+}
+```
+
+### ❌ Missing Validation
+```typescript
+// Bad: No input validation
+async findOneById(id: any) {
+  return this.prisma.model.findUnique({ where: { id } });
+}
+```
+
+### ✅ Proper Validation
+```typescript
+// Good: Input validation with proper types
+async findOneById(connectModelDto: ConnectModelDto) {
+  if (!connectModelDto.id) {
+    throw new BadRequestException('ID is required for findOneById');
+  }
+  return this.prisma.model.findUniqueOrThrow({
+    where: { id: connectModelDto.id }
+  });
+}
+```
+
+### ❌ Inconsistent Error Handling
+```typescript
+// Bad: Inconsistent error handling
+async findOne(id: number) {
+  try {
+    return await this.prisma.model.findUnique({ where: { id } });
+  } catch (error) {
+    throw new Error('Something went wrong');
+  }
+}
+```
+
+### ✅ Consistent Error Handling
+```typescript
+// Good: Consistent error handling with specific exceptions
+async findOne(id: number) {
+  try {
+    return await this.prisma.model.findUniqueOrThrow({ where: { id } });
+  } catch (error) {
+    if (error instanceof PrismaClientKnownRequestError) {
+      if (error.code === 'P2025') {
+        throw new ModelNotFoundException();
+      }
+    }
+    throw error;
+  }
+}
+```
+
+## Testing Patterns
+
+### Service Testing
+```typescript
+describe('ModelService', () => {
+  let service: ModelService;
+  let repo: ModelRepo;
+
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        ModelService,
+        {
+          provide: ModelRepo,
+          useValue: {
+            create: jest.fn(),
+            findOneById: jest.fn(),
+            findAll: jest.fn(),
+            update: jest.fn(),
+            remove: jest.fn(),
+          },
+        },
+      ],
+    }).compile();
+
+    service = module.get<ModelService>(ModelService);
+    repo = module.get<ModelRepo>(ModelRepo);
+  });
+
+  it('should create a model', async () => {
+    const createDto = { name: 'Test Model', price: 10.99 };
+    const expected = { id: 1, ...createDto };
+    jest.spyOn(repo, 'create').mockResolvedValue(expected);
+
+    const result = await service.create(createDto);
+    expect(result).toEqual(expected);
+  });
+});
+```
+
+### Repository Testing
+```typescript
+describe('ModelRepo', () => {
+  let repo: ModelRepo;
+  let prisma: PrismaService;
+
+  beforeEach(async () => {
+    const module = await Test.createTestingModule({
+      providers: [
+        ModelRepo,
+        {
+          provide: PrismaService,
+          useValue: {
+            model: {
+              create: jest.fn(),
+              findUniqueOrThrow: jest.fn(),
+              findMany: jest.fn(),
+              update: jest.fn(),
+              delete: jest.fn(),
+              count: jest.fn(),
+            },
+          },
+        },
+      ],
+    }).compile();
+
+    repo = module.get<ModelRepo>(ModelRepo);
+    prisma = module.get<PrismaService>(PrismaService);
+  });
+
+  it('should find model by id', async () => {
+    const expected = { id: 1, name: 'Test' };
+    jest.spyOn(prisma.model, 'findUniqueOrThrow').mockResolvedValue(expected);
+
+    const result = await repo.findOneById({ id: 1 });
+    expect(result).toEqual(expected);
+  });
+});
+```
+
