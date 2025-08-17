@@ -1,12 +1,12 @@
 import { BadRequestException, Injectable } from '@nestjs/common';
 import { Medication, Prisma } from '@prisma/client';
 import { BasePaginationDto } from 'src/common/dtos/base-pagination.dto';
+import { File } from 'src/common/types/file';
 import { ConnectMedicationDto } from 'src/generated/medication/dto/connect-medication.dto';
 import { UpdateMedicationDto } from 'src/generated/medication/dto/update-medication.dto';
 import { PrismaService } from 'src/prisma/prisma.service';
 import { CreateMedicationDto } from './dto/create-medication.dto';
 import { FindMedicationsDto } from './dto/find-medications.dto';
-import { CreateMedicationFailedException } from './exceptions/create-medication-failed.exception';
 
 @Injectable()
 export class MedicationRepo {
@@ -16,18 +16,20 @@ export class MedicationRepo {
     createMedicationDto: CreateMedicationDto,
     urlName: string,
   ): Promise<Medication> {
-    let medication: Medication;
-    try {
-      medication = await this.prisma.medication.create({
-        data: {
-          ...createMedicationDto,
-          urlName,
+    const { categoryId, ...medicationData } = createMedicationDto;
+    const medication = await this.prisma.medication.create({
+      data: {
+        ...medicationData,
+        urlName,
+        category: {
+          connect: {
+            id: categoryId,
+          },
         },
-        include: { category: { select: { name: true } } },
-      });
-    } catch (error) {
-      throw new CreateMedicationFailedException(error.message);
-    }
+      },
+      include: { category: { select: { name: true } } },
+    });
+
     return medication;
   }
 
@@ -127,5 +129,13 @@ export class MedicationRepo {
 
   async remove(id: number): Promise<void> {
     await this.prisma.medication.delete({ where: { id } });
+  }
+
+  async uploadPicture(id: number, file: File): Promise<Medication> {
+    return this.prisma.medication.update({
+      where: { id },
+      data: { image: file.filename },
+      include: { category: { select: { name: true } } },
+    });
   }
 }

@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { Medication } from '@prisma/client';
+import { File } from 'src/common/types/file';
 import { ConnectMedicationDto } from 'src/generated/medication/dto/connect-medication.dto';
 import { UpdateMedicationDto } from 'src/generated/medication/dto/update-medication.dto';
 import { CreateMedicationDto } from './dto/create-medication.dto';
@@ -57,6 +58,10 @@ export class MedicationService {
     }
 
     return this.medicationRepo.update(id, updateMedicationDto);
+  }
+
+  async uploadPicture(id: number, file: File): Promise<Medication> {
+    return this.medicationRepo.uploadPicture(id, file);
   }
 
   async remove(id: number): Promise<void> {

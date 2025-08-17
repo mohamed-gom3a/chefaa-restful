@@ -10,9 +10,13 @@ import {
   Patch,
   Post,
   Query,
+  UploadedFile,
 } from '@nestjs/common';
+import { Medication } from '@prisma/client';
 import { Public } from 'src/auth/public.decorator';
+import { FileUpload } from 'src/common/decorators/file-upload.decorator';
 import { IsAdmin } from 'src/common/decorators/is-admin.decorator';
+import { File } from 'src/common/types/file';
 import { ConnectMedicationDto } from 'src/generated/medication/dto/connect-medication.dto';
 import { UpdateMedicationDto } from 'src/generated/medication/dto/update-medication.dto';
 import { CreateMedicationDto } from './dto/create-medication.dto';
@@ -35,7 +39,7 @@ export class MedicationController {
     return this.medicationService.findOneById(connectMedicationDto);
   }
 
-  @Get('/url/:urlName')
+  @Get('/:urlName')
   async findOneByUrlName(@Param('urlName') urlName: string) {
     const connectMedicationDto: ConnectMedicationDto = { urlName };
     return this.medicationService.findOneByUrlName(connectMedicationDto);
@@ -48,6 +52,13 @@ export class MedicationController {
   }
 
   @IsAdmin()
+  @Delete('/:id')
+  @HttpCode(HttpStatus.NO_CONTENT)
+  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
+    return this.medicationService.remove(id);
+  }
+
+  @IsAdmin()
   @Patch('/:id')
   async update(
     @Param('id', ParseIntPipe) id: number,
@@ -57,9 +68,12 @@ export class MedicationController {
   }
 
   @IsAdmin()
-  @Delete('/:id')
-  @HttpCode(HttpStatus.NO_CONTENT)
-  remove(@Param('id', ParseIntPipe) id: number): Promise<void> {
-    return this.medicationService.remove(id);
+  @FileUpload()
+  @Patch(':id/image')
+  uploadPhoto(
+    @Param('id', ParseIntPipe) id: number,
+    @UploadedFile() file: File,
+  ): Promise<Medication> {
+    return this.medicationService.uploadPicture(id, file);
   }
 }
