@@ -4,19 +4,22 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class ProductDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
-name: string ;
-@ApiProperty()
-urlName: string ;
 @ApiProperty({
+  type: 'string',
+})
+name: string ;
+@ApiProperty({
+  type: 'string',
   nullable: true,
 })
 picture: string  | null;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 basePrice: Prisma.Decimal ;
 @ApiProperty({
@@ -30,6 +33,7 @@ discountPercentage: number ;
 })
 stock: number ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 description: string  | null;
@@ -38,4 +42,8 @@ description: string  | null;
   format: 'date-time',
 })
 createdAt: Date ;
+@ApiProperty({
+  type: 'string',
+})
+urlName: string ;
 }

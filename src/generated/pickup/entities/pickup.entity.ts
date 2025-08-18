@@ -5,13 +5,17 @@ import {Order} from '../../order/entities/order.entity'
 
 
 export class Pickup {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   enum: PickupStatus,
+  enumName: 'PickupStatus',
 })
 pickupStatus: PickupStatus ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 pharmacyAddress: string  | null;
@@ -28,10 +32,19 @@ pharmacyLat: number  | null;
 })
 pharmacyLng: number  | null;
 @ApiProperty({
+  type: 'string',
+})
+orderId: string ;
+@ApiProperty({
   type: () => Order,
   required: false,
 })
 order?: Order ;
-@ApiProperty()
+<<<<<<< HEAD
+@ApiProperty({
+  type: 'string',
+})
 orderId: string ;
+=======
+>>>>>>> feature/super-category
 }

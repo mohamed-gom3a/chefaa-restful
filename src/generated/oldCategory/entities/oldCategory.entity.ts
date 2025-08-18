@@ -4,14 +4,18 @@ import {Product} from '../../product/entities/product.entity'
 
 
 export class OldCategory {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 name: string ;
 @ApiProperty({
   type: () => Product,
   isArray: true,
   required: false,
 })
-products?: Product[] ;
+Product?: Product[] ;
 }

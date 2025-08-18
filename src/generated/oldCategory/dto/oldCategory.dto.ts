@@ -3,8 +3,12 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class OldCategoryDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 name: string ;
 }

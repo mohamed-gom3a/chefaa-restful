@@ -5,16 +5,22 @@ import {Order} from '../../order/entities/order.entity'
 
 
 export class Payment {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 amount: Prisma.Decimal ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 method: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 transactionId: string ;
 @ApiProperty({
   type: 'string',
@@ -22,10 +28,19 @@ transactionId: string ;
 })
 paidAt: Date ;
 @ApiProperty({
+  type: 'string',
+})
+orderId: string ;
+@ApiProperty({
   type: () => Order,
   required: false,
 })
 order?: Order ;
-@ApiProperty()
+<<<<<<< HEAD
+@ApiProperty({
+  type: 'string',
+})
 orderId: string ;
+=======
+>>>>>>> feature/super-category
 }

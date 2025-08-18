@@ -3,7 +3,9 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class WishlistItemDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   type: 'string',

@@ -8,12 +8,14 @@ import {IsBoolean,IsDecimal,IsInt,IsOptional,IsString} from 'class-validator'
 
 export class UpdateDeliveryOptionDto {
   @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 optionName?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
@@ -28,16 +30,16 @@ optionType?: string ;
 @IsInt()
 deliveryTimeHours?: number ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
 })
 @IsOptional()
 @IsDecimal()
 deliveryFee?: Prisma.Decimal ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
   nullable: true,
 })
@@ -45,8 +47,8 @@ deliveryFee?: Prisma.Decimal ;
 @IsDecimal()
 discountPercentage?: Prisma.Decimal  | null;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
   nullable: true,
 })
@@ -54,6 +56,7 @@ discountPercentage?: Prisma.Decimal  | null;
 @IsDecimal()
 minimumOrderAmount?: Prisma.Decimal  | null;
 @ApiProperty({
+  type: 'boolean',
   required: false,
   nullable: true,
 })

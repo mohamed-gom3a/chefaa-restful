@@ -6,21 +6,29 @@ import {IsDateString,IsNotEmpty,IsOptional,IsString} from 'class-validator'
 
 
 export class CreateUserTokensDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 refreshToken: string ;
-@ApiProperty()
+<<<<<<< HEAD
+@ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 family: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
 @IsOptional()
 @IsString()
 browserInfo?: string  | null;
+=======
+>>>>>>> feature/super-category
 @ApiProperty({
   type: 'string',
   format: 'date-time',
@@ -28,4 +36,18 @@ browserInfo?: string  | null;
 @IsNotEmpty()
 @IsDateString()
 expiresAt: Date ;
+@ApiProperty({
+  type: 'string',
+})
+@IsNotEmpty()
+@IsString()
+family: string ;
+@ApiProperty({
+  type: 'string',
+  required: false,
+  nullable: true,
+})
+@IsOptional()
+@IsString()
+browserInfo?: string  | null;
 }

@@ -3,9 +3,13 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class ImageDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 url: string ;
 @ApiProperty({
   type: 'string',

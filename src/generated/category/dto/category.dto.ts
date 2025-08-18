@@ -4,14 +4,29 @@ import {ApiProperty} from '@nestjs/swagger'
 
 export class CategoryDto {
   @ApiProperty({
+  type: 'string',
+})
+name: string ;
+@ApiProperty({
+  type: 'string',
+  nullable: true,
+})
+image: string  | null;
+@ApiProperty({
   type: 'integer',
   format: 'int32',
 })
 id: number ;
-@ApiProperty()
+<<<<<<< HEAD
+@ApiProperty({
+  type: 'string',
+})
 name: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 image: string  | null;
+=======
+>>>>>>> feature/super-category
 }

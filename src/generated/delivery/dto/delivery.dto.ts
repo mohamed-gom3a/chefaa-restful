@@ -4,18 +4,23 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class DeliveryDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
   enum: DeliveryStatus,
+  enumName: 'DeliveryStatus',
   nullable: true,
 })
 deliveryStatus: DeliveryStatus  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 trackingNumber: string  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 deliveryAddress: string  | null;

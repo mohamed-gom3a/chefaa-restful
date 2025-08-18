@@ -7,6 +7,7 @@ import {IsOptional,IsString} from 'class-validator'
 
 export class UpdateImageDto {
   @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()

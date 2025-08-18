@@ -1,21 +1,29 @@
 
-import {Gender,Country} from '@prisma/client'
+import {Country,Gender} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {IsInt,IsNotEmpty,IsOptional,IsString} from 'class-validator'
+import {IsEnum,IsInt,IsNotEmpty,IsOptional,IsString} from 'class-validator'
 
 
 
 
 export class CreateUserDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+<<<<<<< HEAD
+})
 @IsNotEmpty()
 @IsString()
 email: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 password: string ;
 @ApiProperty({
+  type: 'string',
+=======
+>>>>>>> feature/super-category
   required: false,
   nullable: true,
 })
@@ -23,12 +31,47 @@ password: string ;
 @IsString()
 name?: string  | null;
 @ApiProperty({
+  type: 'string',
+<<<<<<< HEAD
+=======
+})
+@IsNotEmpty()
+@IsString()
+email: string ;
+@ApiProperty({
+  type: 'string',
+})
+@IsNotEmpty()
+@IsString()
+password: string ;
+@ApiProperty({
+  type: 'string',
+>>>>>>> feature/super-category
   required: false,
   nullable: true,
 })
 @IsOptional()
 @IsString()
 address?: string  | null;
+@ApiProperty({
+  enum: Country,
+  enumName: 'Country',
+  default: 'EG',
+  required: false,
+  nullable: true,
+})
+@IsOptional()
+@IsEnum(Country)
+country?: Country  | null;
+@ApiProperty({
+  enum: Gender,
+  enumName: 'Gender',
+  required: false,
+  nullable: true,
+})
+@IsOptional()
+@IsEnum(Gender)
+gender?: Gender  | null;
 @ApiProperty({
   type: 'integer',
   format: 'int32',
@@ -38,19 +81,26 @@ address?: string  | null;
 @IsOptional()
 @IsInt()
 phone?: number  | null;
+<<<<<<< HEAD
 @ApiProperty({
   enum: Gender,
+  enumName: 'Gender',
   required: false,
   nullable: true,
 })
 @IsOptional()
+@IsEnum(Gender)
 gender?: Gender  | null;
 @ApiProperty({
   enum: Country,
+  enumName: 'Country',
   default: 'EG',
   required: false,
   nullable: true,
 })
 @IsOptional()
+@IsEnum(Country)
 country?: Country  | null;
+=======
+>>>>>>> feature/super-category
 }

@@ -8,18 +8,14 @@ import {IsDecimal,IsOptional,IsString} from 'class-validator'
 
 export class UpdateProductDto {
   @ApiProperty({
+  type: 'string',
   required: false,
 })
 @IsOptional()
 @IsString()
 name?: string ;
 @ApiProperty({
-  required: false,
-})
-@IsOptional()
-@IsString()
-urlName?: string ;
-@ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
@@ -27,18 +23,26 @@ urlName?: string ;
 @IsString()
 picture?: string  | null;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
 })
 @IsOptional()
 @IsDecimal()
 basePrice?: Prisma.Decimal ;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
 @IsOptional()
 @IsString()
 description?: string  | null;
+@ApiProperty({
+  type: 'string',
+  required: false,
+})
+@IsOptional()
+@IsString()
+urlName?: string ;
 }

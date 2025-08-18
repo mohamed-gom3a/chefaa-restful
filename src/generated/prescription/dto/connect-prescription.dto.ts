@@ -6,7 +6,9 @@ import {IsNotEmpty,IsString} from 'class-validator'
 
 
 export class ConnectPrescriptionDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 id: string ;

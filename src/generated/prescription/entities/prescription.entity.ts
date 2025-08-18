@@ -5,9 +5,12 @@ import {Medication} from '../../medication/entities/medication.entity'
 
 
 export class Prescription {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 description: string  | null;
@@ -22,6 +25,11 @@ createdAt: Date ;
 })
 validUntil: Date ;
 @ApiProperty({
+  type: 'integer',
+  format: 'int32',
+})
+medicationId: number ;
+@ApiProperty({
   type: () => Image,
   isArray: true,
   required: false,
@@ -32,9 +40,4 @@ images?: Image[] ;
   required: false,
 })
 medication?: Medication ;
-@ApiProperty({
-  type: 'integer',
-  format: 'int32',
-})
-medicationId: number ;
 }

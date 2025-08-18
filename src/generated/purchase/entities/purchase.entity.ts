@@ -1,29 +1,23 @@
 
 import {Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {User} from '../../user/entities/user.entity'
 import {Product} from '../../product/entities/product.entity'
+import {User} from '../../user/entities/user.entity'
 
 
 export class Purchase {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 id: string ;
 @ApiProperty({
-  type: () => User,
-  required: false,
-  nullable: true,
-})
-user?: User  | null;
-@ApiProperty({
+  type: 'string',
   nullable: true,
 })
 userId: string  | null;
 @ApiProperty({
-  type: () => Product,
-  required: false,
+  type: 'string',
 })
-product?: Product ;
-@ApiProperty()
 productId: string ;
 @ApiProperty({
   type: 'integer',
@@ -31,8 +25,8 @@ productId: string ;
 })
 amount: number ;
 @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
 })
 totalPrice: Prisma.Decimal ;
 @ApiProperty({
@@ -42,6 +36,7 @@ totalPrice: Prisma.Decimal ;
 })
 reviewNote: number  | null;
 @ApiProperty({
+  type: 'string',
   nullable: true,
 })
 reviewComment: string  | null;
@@ -50,4 +45,15 @@ reviewComment: string  | null;
   format: 'date-time',
 })
 createdAt: Date ;
+@ApiProperty({
+  type: () => Product,
+  required: false,
+})
+Product?: Product ;
+@ApiProperty({
+  type: () => User,
+  required: false,
+  nullable: true,
+})
+User?: User  | null;
 }

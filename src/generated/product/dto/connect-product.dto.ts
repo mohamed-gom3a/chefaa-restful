@@ -7,22 +7,22 @@ import {IsOptional,IsString} from 'class-validator'
 
 export class ConnectProductDto {
   @ApiProperty({
+  type: 'string',
   required: false,
-  nullable: true,
 })
 @IsOptional()
 @IsString()
 id?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
-  nullable: true,
 })
 @IsOptional()
 @IsString()
 name?: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
-  nullable: true,
 })
 @IsOptional()
 @IsString()

@@ -33,6 +33,69 @@ models/{model}/
     └── create-{model}-failed.exception.ts
 ```
 
+<<<<<<< HEAD
+=======
+## File Naming Conventions
+
+### File Name Format
+All files must use **snake_case with hyphens** as separators between words. Never use camelCase for file names.
+
+```typescript
+// ✅ Good: snake_case with hyphens
+user-profile.controller.ts
+user-profile.service.ts
+user-profile.repo.ts
+create-user-profile.dto.ts
+find-user-profiles.dto.ts
+user-profile-not-found.exception.ts
+
+// ❌ Bad: camelCase
+userProfile.controller.ts
+userProfile.service.ts
+userProfile.repo.ts
+createUserProfile.dto.ts
+findUserProfiles.dto.ts
+userProfileNotFound.exception.ts
+```
+
+### Model File Naming Pattern
+For model files, use the exact pattern: `{model-name}.{type}.ts`
+
+```typescript
+// ✅ Good: Consistent model naming
+super-category.controller.ts
+super-category.service.ts
+super-category.repo.ts
+super-category.module.ts
+
+// ✅ Good: DTO naming
+create-super-category.dto.ts
+find-super-categories.dto.ts
+update-super-category.dto.ts
+
+// ✅ Good: Exception naming
+super-category-not-found.exception.ts
+super-category-name-in-use.exception.ts
+```
+
+### Directory Naming
+Directories should also follow snake_case with hyphens:
+
+```typescript
+// ✅ Good: Directory names
+src/models/super-category/
+src/common/decorators/
+src/common/exceptions/
+src/generated/super-category/
+
+// ❌ Bad: camelCase directories
+src/models/superCategory/
+src/common/decorators/
+src/common/exceptions/
+src/generated/superCategory/
+```
+
+>>>>>>> feature/super-category
 ## Controller Patterns
 
 ### Import Organization

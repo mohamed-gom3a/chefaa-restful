@@ -3,16 +3,35 @@ import {ApiProperty} from '@nestjs/swagger'
 
 
 export class UserTokensDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+<<<<<<< HEAD
+})
 id: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 refreshToken: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 family: string ;
 @ApiProperty({
+  type: 'string',
   nullable: true,
+=======
+>>>>>>> feature/super-category
 })
-browserInfo: string  | null;
+id: string ;
+@ApiProperty({
+  type: 'string',
+})
+refreshToken: string ;
+@ApiProperty({
+  type: 'string',
+  format: 'date-time',
+})
+createdAt: Date ;
 @ApiProperty({
   type: 'string',
   format: 'date-time',
@@ -20,7 +39,11 @@ browserInfo: string  | null;
 expiresAt: Date ;
 @ApiProperty({
   type: 'string',
-  format: 'date-time',
 })
-createdAt: Date ;
+family: string ;
+@ApiProperty({
+  type: 'string',
+  nullable: true,
+})
+browserInfo: string  | null;
 }

@@ -6,11 +6,14 @@ import {IsNotEmpty,IsOptional,IsString} from 'class-validator'
 
 
 export class CreateSuperCategoryDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 name: string ;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

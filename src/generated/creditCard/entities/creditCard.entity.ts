@@ -9,7 +9,9 @@ export class CreditCard {
   format: 'int32',
 })
 id: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 last4: string ;
 @ApiProperty({
   type: 'integer',
@@ -21,7 +23,9 @@ expiryMonth: number ;
   format: 'int32',
 })
 expiryYear: number ;
-@ApiProperty()
+@ApiProperty({
+  type: 'string',
+})
 token: string ;
 @ApiProperty({
   type: 'string',
@@ -29,10 +33,19 @@ token: string ;
 })
 createdAt: Date ;
 @ApiProperty({
+  type: 'string',
+})
+userId: string ;
+@ApiProperty({
   type: () => User,
   required: false,
 })
 user?: User ;
-@ApiProperty()
+<<<<<<< HEAD
+@ApiProperty({
+  type: 'string',
+})
 userId: string ;
+=======
+>>>>>>> feature/super-category
 }

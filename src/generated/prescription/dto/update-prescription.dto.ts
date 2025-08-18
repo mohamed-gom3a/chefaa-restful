@@ -7,6 +7,7 @@ import {IsOptional,IsString} from 'class-validator'
 
 export class UpdatePrescriptionDto {
   @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })

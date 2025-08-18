@@ -1,25 +1,31 @@
 
 import {NotificationType} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {IsBoolean,IsNotEmpty,IsOptional,IsString} from 'class-validator'
+import {IsBoolean,IsEnum,IsNotEmpty,IsOptional,IsString} from 'class-validator'
 
 
 
 
 export class CreateNotificationDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 message: string ;
-@ApiProperty()
+@ApiProperty({
+  type: 'boolean',
+})
 @IsNotEmpty()
 @IsBoolean()
 isImportant: boolean ;
 @ApiProperty({
   enum: NotificationType,
+  enumName: 'NotificationType',
   required: false,
   nullable: true,
 })
 @IsOptional()
+@IsEnum(NotificationType)
 notificationType?: NotificationType  | null;
 }
