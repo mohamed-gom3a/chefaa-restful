@@ -139,14 +139,6 @@ export class SuperCategoryRepo {
       return await this.prisma.superCategory.update({
         where: { id },
         data: { image: file.filename },
-        include: {
-          categories: {
-            select: {
-              id: true,
-              name: true,
-            },
-          },
-        },
       });
     } catch (error) {
       if (error instanceof PrismaClientKnownRequestError) {

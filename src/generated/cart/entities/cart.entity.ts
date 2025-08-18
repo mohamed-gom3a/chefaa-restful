@@ -31,14 +31,21 @@ createdAt: Date ;
 })
 updatedAt: Date ;
 @ApiProperty({
+  type: 'string',
+})
+userId: string ;
+@ApiProperty({
   type: () => User,
   required: false,
 })
 user?: User ;
+<<<<<<< HEAD
 @ApiProperty({
   type: 'string',
 })
 userId: string ;
+=======
+>>>>>>> feature/super-category
 @ApiProperty({
   type: () => CartItem,
   isArray: true,

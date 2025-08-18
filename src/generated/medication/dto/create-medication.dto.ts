@@ -20,6 +20,7 @@ name: string ;
 })
 @IsOptional()
 @IsString()
+<<<<<<< HEAD
 urlName?: string  | null;
 @ApiProperty({
   type: 'string',
@@ -28,6 +29,8 @@ urlName?: string  | null;
 })
 @IsOptional()
 @IsString()
+=======
+>>>>>>> feature/super-category
 description?: string  | null;
 @ApiProperty({
   type: 'string',
@@ -44,4 +47,15 @@ price: Prisma.Decimal ;
 @IsOptional()
 @IsString()
 image?: string  | null;
+<<<<<<< HEAD
+=======
+@ApiProperty({
+  type: 'string',
+  required: false,
+  nullable: true,
+})
+@IsOptional()
+@IsString()
+urlName?: string  | null;
+>>>>>>> feature/super-category
 }

@@ -1,8 +1,8 @@
 
 import {Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {Medication} from '../../medication/entities/medication.entity'
 import {Cart} from '../../cart/entities/cart.entity'
+import {Medication} from '../../medication/entities/medication.entity'
 
 
 export class CartItem {
@@ -21,22 +21,28 @@ price: Prisma.Decimal ;
 })
 quantity: number ;
 @ApiProperty({
-  type: () => Medication,
-  required: false,
-})
-medication?: Medication ;
-@ApiProperty({
   type: 'integer',
   format: 'int32',
 })
 medicationId: number ;
+@ApiProperty({
+  type: 'string',
+})
+cartId: string ;
 @ApiProperty({
   type: () => Cart,
   required: false,
 })
 cart?: Cart ;
 @ApiProperty({
+<<<<<<< HEAD
   type: 'string',
 })
 cartId: string ;
+=======
+  type: () => Medication,
+  required: false,
+})
+medication?: Medication ;
+>>>>>>> feature/super-category
 }

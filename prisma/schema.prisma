@@ -5,14 +5,14 @@ generator client {
 generator nestjsDto {
   provider                        = "prisma-generator-nestjs-dto"
   output                          = "../src/generated"
-  classValidation                 = "true"
-  createDtoPrefix                 = "Create"
-  updateDtoPrefix                 = "Update"
-  dtoSuffix                       = "Dto"
-  outputType                      = "class"
-  requiredResponseApiProperty     = "true"
-  outputToNestJsResourceStructure = "true"
   flatResourceStructure           = "false"
+  updateDtoPrefix                 = "Update"
+  outputType                      = "class"
+  outputToNestJsResourceStructure = "true"
+  createDtoPrefix                 = "Create"
+  classValidation                 = "true"
+  requiredResponseApiProperty     = "true"
+  dtoSuffix                       = "Dto"
 }
 
 datasource db {
@@ -28,9 +28,8 @@ model Subscription {
   endDate        DateTime?
   isActive       Boolean?
   createdAt      DateTime     @default(now())
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  userId         String
+  user           User         @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([isActive, createdAt])
@@ -45,8 +44,8 @@ model Offer {
   active       Boolean    @default(true)
   validFrom    DateTime
   validUntil   DateTime?
-  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
   medicationId Int
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
 
   @@index([medicationId])
   @@index([active, validFrom, validUntil])
@@ -60,9 +59,8 @@ model Notification {
   isImportant      Boolean
   notificationType NotificationType?
   createdAt        DateTime          @default(now())
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  userId           String
+  user             User              @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([isImportant, createdAt])
@@ -82,8 +80,8 @@ model Address {
   addressType AddressType @default(HOME)
   isDefault   Boolean     @default(false)
   createdAt   DateTime    @default(now())
-  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
   userId      String
+  user        User        @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([addressType, isDefault])
@@ -96,11 +94,10 @@ model CreditCard {
   last4       String   @db.VarChar(4)
   expiryMonth Int
   expiryYear  Int
-  token       String // from payment gateway
+  token       String
   createdAt   DateTime @default(now())
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
+  userId      String
+  user        User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([expiryYear, expiryMonth])
@@ -122,8 +119,7 @@ model Coupon {
   createdBy        String
   createdAt        DateTime   @default(now())
   updatedAt        DateTime   @updatedAt
-
-  orders Order[]
+  orders           Order[]
 
   @@index([isActive, validFrom, validUntil])
   @@index([amountType, isActive])
@@ -136,8 +132,8 @@ model Payment {
   method        String
   transactionId String
   paidAt        DateTime
-  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId       String   @unique
+  order         Order    @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([method, paidAt])
   @@index([transactionId])
@@ -156,15 +152,14 @@ model Order {
   paymentName       String?
   createdAt         DateTime          @default(now())
   updatedAt         DateTime          @updatedAt
-
-  delivery Delivery?
-  pickup   Pickup?
-  payment  Payment?
-  coupon   Coupon?     @relation(fields: [couponId], references: [id], onDelete: SetNull)
-  couponId String?
-  user     User        @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId   String
-  items    OrderItem[]
+  couponId          String?
+  userId            String
+  delivery          Delivery?
+  coupon            Coupon?           @relation(fields: [couponId], references: [id])
+  user              User              @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items             OrderItem[]
+  payment           Payment?
+  pickup            Pickup?
 
   @@index([userId, orderStatus])
   @@index([createdAt, orderStatus])
@@ -174,16 +169,14 @@ model Order {
 }
 
 model OrderItem {
-  id       String  @id @default(uuid())
-  price    Decimal @db.Decimal(10, 2)
-  quantity Int
-
-  discountAmount Decimal @default(0) @db.Decimal(10, 2)
-
-  order        Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId      String
-  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
-  medicationId Int
+  id             String     @id @default(uuid())
+  price          Decimal    @db.Decimal(10, 2)
+  quantity       Int
+  discountAmount Decimal    @default(0) @db.Decimal(10, 2)
+  orderId        String
+  medicationId   Int
+  medication     Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  order          Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([orderId])
   @@index([medicationId])
@@ -200,10 +193,10 @@ model Delivery {
   outAt            DateTime?
   estimatedAt      DateTime?
   completedAt      DateTime?
-  deliveryOption   DeliveryOption? @relation(fields: [deliveryOptionId], references: [id], onDelete: SetNull)
   deliveryOptionId Int?
-  order            Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
   orderId          String          @unique
+  deliveryOption   DeliveryOption? @relation(fields: [deliveryOptionId], references: [id])
+  order            Order           @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([deliveryStatus, estimatedAt])
   @@index([deliveryOptionId])
@@ -218,9 +211,8 @@ model Pickup {
   pharmacyAddress String?
   pharmacyLat     Float?
   pharmacyLng     Float?
-
-  order   Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  orderId String @unique
+  orderId         String       @unique
+  order           Order        @relation(fields: [orderId], references: [id], onDelete: Cascade)
 
   @@index([pickupStatus])
   @@index([pharmacyLat, pharmacyLng])
@@ -252,24 +244,22 @@ model Cart {
   cartStatus CartStatus @default(ACTIVE)
   createdAt  DateTime   @default(now())
   updatedAt  DateTime   @updatedAt
-
-  user   User       @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-  items  CartItem[]
+  userId     String
+  user       User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  items      CartItem[]
 
   @@index([userId, cartStatus])
   @@index([createdAt])
 }
 
 model CartItem {
-  id       String  @id @default(uuid())
-  price    Decimal @db.Decimal(10, 2)
-  quantity Int
-
-  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  id           String     @id @default(uuid())
+  price        Decimal    @db.Decimal(10, 2)
+  quantity     Int
   medicationId Int
-  cart         Cart       @relation(fields: [cartId], references: [id])
   cartId       String
+  cart         Cart       @relation(fields: [cartId], references: [id])
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
 
   @@index([cartId])
   @@index([medicationId])
@@ -277,26 +267,25 @@ model CartItem {
 }
 
 model Medication {
-  id           Int       @id @default(autoincrement())
-  name         String
-  urlName      String?   @unique
-  description  String?
-  price        Decimal   @db.Decimal(10, 2)
-  stock        Int       @default(0)
-  createdAt    DateTime  @default(now())
-  updatedAt    DateTime  @updatedAt
-  sellingCount Int       @default(0)
-  image        String?
-  category     Category? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
-  categoryId   Int?
-  bundle       Bundle?   @relation(fields: [bundleId], references: [id], onDelete: SetNull)
-  bundleId     Int?
-
+  id            Int            @id @default(autoincrement())
+  name          String
+  description   String?
+  price         Decimal        @db.Decimal(10, 2)
+  stock         Int            @default(0)
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  sellingCount  Int            @default(0)
+  image         String?
+  categoryId    Int?
+  bundleId      Int?
+  urlName       String?        @unique
   cartItems     CartItem[]
-  orderItems    OrderItem[]
-  wishlistItems WishlistItem[]
-  prescriptions Prescription[]
+  bundle        Bundle?        @relation(fields: [bundleId], references: [id])
+  category      Category?      @relation(fields: [categoryId], references: [id])
   Offer         Offer[]
+  orderItems    OrderItem[]
+  prescriptions Prescription[]
+  wishlistItems WishlistItem[]
 
   @@index([categoryId])
   @@index([bundleId])
@@ -307,41 +296,37 @@ model Medication {
 }
 
 model Bundle {
-  id          Int     @id @default(autoincrement())
-  name        String  @unique
+  id          Int          @id @default(autoincrement())
+  name        String       @unique
   description String?
-
   medications Medication[]
 }
 
 model Category {
-  id              Int           @id @default(autoincrement())
   name            String        @unique
   image           String?
-  superCategory   SuperCategory @relation(fields: [superCategoryId], references: [id], onDelete: Cascade)
   superCategoryId Int
-
-  medications Medication[]
+  id              Int           @id @default(autoincrement())
+  superCategory   SuperCategory @relation(fields: [superCategoryId], references: [id], onDelete: Cascade)
+  medications     Medication[]
 
   @@index([superCategoryId])
 }
 
 model SuperCategory {
-  id    Int     @id @default(autoincrement())
-  name  String  @unique
-  image String?
-
+  id         Int        @id @default(autoincrement())
+  name       String     @unique
+  image      String?
   categories Category[]
 }
 
 model WishlistItem {
-  id        String   @id @default(uuid())
-  createdAt DateTime @default(now())
-
-  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
+  id           String     @id @default(uuid())
+  createdAt    DateTime   @default(now())
   userId       String
-  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
   medicationId Int
+  medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
+  user         User       @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, medicationId])
   @@index([userId])
@@ -350,32 +335,31 @@ model WishlistItem {
 }
 
 model Prescription {
-  id          String   @id @default(uuid())
-  description String?
-  createdAt   DateTime @default(now())
-  validUntil  DateTime @default(dbgenerated("now() + interval '12 hours'"))
-
+  id           String     @id @default(uuid())
+  description  String?
+  createdAt    DateTime   @default(now())
+  validUntil   DateTime   @default(dbgenerated("(now() + '12:00:00'::interval)"))
+  medicationId Int
   images       Image[]
   medication   Medication @relation(fields: [medicationId], references: [id], onDelete: Cascade)
-  medicationId Int
 
   @@index([medicationId])
   @@index([createdAt, validUntil])
 }
 
 model Image {
-  id        String   @id @default(uuid())
-  url       String
-  createdAt DateTime @default(now())
-
-  prescription   Prescription? @relation(fields: [prescriptionId], references: [id], onDelete: SetNull)
+  id             String        @id @default(uuid())
+  url            String
+  createdAt      DateTime      @default(now())
   prescriptionId String?
+  prescription   Prescription? @relation(fields: [prescriptionId], references: [id])
 
   @@index([prescriptionId])
   @@index([createdAt])
 }
 
 model User {
+<<<<<<< HEAD
   id        String   @id @default(uuid())
   email     String   @unique
   password  String
@@ -393,10 +377,29 @@ model User {
   carts         Cart[]
   wishlistItems WishlistItem[]
   creditCards   CreditCard[]
+=======
+  id            String         @id @default(uuid())
+  name          String?
+  email         String         @unique
+  password      String
+  createdAt     DateTime       @default(now())
+  updatedAt     DateTime       @updatedAt
+  address       String?
+  role          Role           @default(USER)
+  country       Country?       @default(EG)
+  gender        Gender?
+  phone         Int?
+>>>>>>> feature/super-category
   Address       Address[]
+  carts         Cart[]
+  creditCards   CreditCard[]
   Notification  Notification[]
+  orders        Order[]
+  Purchase      Purchase[]
+  Subscription  Subscription[]
+  UserTokens    UserTokens[]
+  wishlistItems WishlistItem[]
 
-  Subscription Subscription[]
   @@index([email])
   @@index([role, country])
   @@index([gender])
@@ -404,16 +407,14 @@ model User {
 }
 
 model UserTokens {
-  id String @id @default(uuid())
-
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
-  userId String
-
+  id           String   @id @default(uuid())
+  userId       String
   refreshToken String
+  createdAt    DateTime @default(now())
+  expiresAt    DateTime
   family       String   @unique
   browserInfo  String?
-  expiresAt    DateTime
-  createdAt    DateTime @default(now())
+  user         User     @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@index([userId])
   @@index([expiresAt])
@@ -421,10 +422,53 @@ model UserTokens {
   @@index([userId, expiresAt])
 }
 
+model OldCategory {
+  id      String    @id
+  name    String    @unique
+  Product Product[]
+}
+
+model Product {
+  id                 String        @id
+  name               String        @unique
+  picture            String?
+  basePrice          Decimal       @db.Decimal(10, 2)
+  discountPercentage Int           @default(0)
+  stock              Int           @default(0)
+  description        String?
+  createdAt          DateTime      @default(now())
+  urlName            String        @unique
+  Purchase           Purchase[]
+  OldCategory        OldCategory[]
+
+  @@index([basePrice, stock])
+  @@index([createdAt])
+  @@index([discountPercentage, stock])
+}
+
+model Purchase {
+  id            String   @id
+  userId        String?
+  productId     String
+  amount        Int      @default(1)
+  totalPrice    Decimal  @db.Decimal(10, 2)
+  reviewNote    Int?
+  reviewComment String?
+  createdAt     DateTime @default(now())
+  Product       Product  @relation(fields: [productId], references: [id])
+  User          User?    @relation(fields: [userId], references: [id])
+
+  @@index([productId, createdAt])
+  @@index([productId])
+  @@index([reviewNote])
+  @@index([userId])
+  @@index([userId, productId])
+}
+
 enum Role {
   USER
-  PHARMACIST
   ADMIN
+  PHARMACIST
 }
 
 enum Gender {

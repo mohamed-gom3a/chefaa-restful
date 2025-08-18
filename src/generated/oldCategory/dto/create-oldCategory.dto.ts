@@ -6,7 +6,15 @@ import {IsNotEmpty,IsString} from 'class-validator'
 
 
 export class CreateOldCategoryDto {
-  @ApiProperty()
+  @ApiProperty({
+  type: 'string',
+})
+@IsNotEmpty()
+@IsString()
+id: string ;
+@ApiProperty({
+  type: 'string',
+})
 @IsNotEmpty()
 @IsString()
 name: string ;

@@ -6,13 +6,15 @@ import {Medication} from '../../medication/entities/medication.entity'
 
 export class Category {
   @ApiProperty({
-  type: 'integer',
-  format: 'int32',
+  type: 'string',
 })
+<<<<<<< HEAD
 id: number ;
 @ApiProperty({
   type: 'string',
 })
+=======
+>>>>>>> feature/super-category
 name: string ;
 @ApiProperty({
   type: 'string',
@@ -20,15 +22,20 @@ name: string ;
 })
 image: string  | null;
 @ApiProperty({
-  type: () => SuperCategory,
-  required: false,
-})
-superCategory?: SuperCategory ;
-@ApiProperty({
   type: 'integer',
   format: 'int32',
 })
 superCategoryId: number ;
+@ApiProperty({
+  type: 'integer',
+  format: 'int32',
+})
+id: number ;
+@ApiProperty({
+  type: () => SuperCategory,
+  required: false,
+})
+superCategory?: SuperCategory ;
 @ApiProperty({
   type: () => Medication,
   isArray: true,

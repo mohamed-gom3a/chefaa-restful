@@ -12,6 +12,7 @@ export class CreateUserTokensDto {
 @IsNotEmpty()
 @IsString()
 refreshToken: string ;
+<<<<<<< HEAD
 @ApiProperty({
   type: 'string',
 })
@@ -26,6 +27,8 @@ family: string ;
 @IsOptional()
 @IsString()
 browserInfo?: string  | null;
+=======
+>>>>>>> feature/super-category
 @ApiProperty({
   type: 'string',
   format: 'date-time',
@@ -33,4 +36,18 @@ browserInfo?: string  | null;
 @IsNotEmpty()
 @IsDateString()
 expiresAt: Date ;
+@ApiProperty({
+  type: 'string',
+})
+@IsNotEmpty()
+@IsString()
+family: string ;
+@ApiProperty({
+  type: 'string',
+  required: false,
+  nullable: true,
+})
+@IsOptional()
+@IsString()
+browserInfo?: string  | null;
 }

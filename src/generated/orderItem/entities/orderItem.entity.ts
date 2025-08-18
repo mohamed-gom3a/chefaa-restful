@@ -1,8 +1,8 @@
 
 import {Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
-import {Order} from '../../order/entities/order.entity'
 import {Medication} from '../../medication/entities/medication.entity'
+import {Order} from '../../order/entities/order.entity'
 
 
 export class OrderItem {
@@ -26,22 +26,29 @@ quantity: number ;
 })
 discountAmount: Prisma.Decimal ;
 @ApiProperty({
-  type: () => Order,
-  required: false,
+  type: 'string',
 })
+<<<<<<< HEAD
 order?: Order ;
 @ApiProperty({
   type: 'string',
 })
+=======
+>>>>>>> feature/super-category
 orderId: string ;
+@ApiProperty({
+  type: 'integer',
+  format: 'int32',
+})
+medicationId: number ;
 @ApiProperty({
   type: () => Medication,
   required: false,
 })
 medication?: Medication ;
 @ApiProperty({
-  type: 'integer',
-  format: 'int32',
+  type: () => Order,
+  required: false,
 })
-medicationId: number ;
+order?: Order ;
 }

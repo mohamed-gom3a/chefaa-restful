@@ -28,12 +28,19 @@ transactionId: string ;
 })
 paidAt: Date ;
 @ApiProperty({
+  type: 'string',
+})
+orderId: string ;
+@ApiProperty({
   type: () => Order,
   required: false,
 })
 order?: Order ;
+<<<<<<< HEAD
 @ApiProperty({
   type: 'string',
 })
 orderId: string ;
+=======
+>>>>>>> feature/super-category
 }

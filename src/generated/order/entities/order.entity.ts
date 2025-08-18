@@ -2,11 +2,11 @@
 import {ConflictSolution,ContactPreference,OrderStatus,PaymentMethod,Prisma} from '@prisma/client'
 import {ApiProperty} from '@nestjs/swagger'
 import {Delivery} from '../../delivery/entities/delivery.entity'
-import {Pickup} from '../../pickup/entities/pickup.entity'
-import {Payment} from '../../payment/entities/payment.entity'
 import {Coupon} from '../../coupon/entities/coupon.entity'
 import {User} from '../../user/entities/user.entity'
 import {OrderItem} from '../../orderItem/entities/orderItem.entity'
+import {Payment} from '../../payment/entities/payment.entity'
+import {Pickup} from '../../pickup/entities/pickup.entity'
 
 
 export class Order {
@@ -70,23 +70,20 @@ createdAt: Date ;
 })
 updatedAt: Date ;
 @ApiProperty({
+  type: 'string',
+  nullable: true,
+})
+couponId: string  | null;
+@ApiProperty({
+  type: 'string',
+})
+userId: string ;
+@ApiProperty({
   type: () => Delivery,
   required: false,
   nullable: true,
 })
 delivery?: Delivery  | null;
-@ApiProperty({
-  type: () => Pickup,
-  required: false,
-  nullable: true,
-})
-pickup?: Pickup  | null;
-@ApiProperty({
-  type: () => Payment,
-  required: false,
-  nullable: true,
-})
-payment?: Payment  | null;
 @ApiProperty({
   type: () => Coupon,
   required: false,
@@ -94,23 +91,41 @@ payment?: Payment  | null;
 })
 coupon?: Coupon  | null;
 @ApiProperty({
+<<<<<<< HEAD
   type: 'string',
   nullable: true,
 })
 couponId: string  | null;
 @ApiProperty({
+=======
+>>>>>>> feature/super-category
   type: () => User,
   required: false,
 })
 user?: User ;
+<<<<<<< HEAD
 @ApiProperty({
   type: 'string',
 })
 userId: string ;
+=======
+>>>>>>> feature/super-category
 @ApiProperty({
   type: () => OrderItem,
   isArray: true,
   required: false,
 })
 items?: OrderItem[] ;
+@ApiProperty({
+  type: () => Payment,
+  required: false,
+  nullable: true,
+})
+payment?: Payment  | null;
+@ApiProperty({
+  type: () => Pickup,
+  required: false,
+  nullable: true,
+})
+pickup?: Pickup  | null;
 }

@@ -16,6 +16,7 @@ export class UpdateMedicationDto {
 name?: string ;
 @ApiProperty({
   type: 'string',
+<<<<<<< HEAD
   required: false,
   nullable: true,
 })
@@ -24,6 +25,8 @@ name?: string ;
 urlName?: string  | null;
 @ApiProperty({
   type: 'string',
+=======
+>>>>>>> feature/super-category
   required: false,
   nullable: true,
 })
@@ -46,4 +49,12 @@ price?: Prisma.Decimal ;
 @IsOptional()
 @IsString()
 image?: string  | null;
+@ApiProperty({
+  type: 'string',
+  required: false,
+  nullable: true,
+})
+@IsOptional()
+@IsString()
+urlName?: string  | null;
 }

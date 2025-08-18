@@ -25,6 +25,11 @@ createdAt: Date ;
 })
 validUntil: Date ;
 @ApiProperty({
+  type: 'integer',
+  format: 'int32',
+})
+medicationId: number ;
+@ApiProperty({
   type: () => Image,
   isArray: true,
   required: false,
@@ -35,9 +40,4 @@ images?: Image[] ;
   required: false,
 })
 medication?: Medication ;
-@ApiProperty({
-  type: 'integer',
-  format: 'int32',
-})
-medicationId: number ;
 }

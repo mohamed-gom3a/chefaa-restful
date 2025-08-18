@@ -41,13 +41,13 @@ validFrom: Date ;
 })
 validUntil: Date  | null;
 @ApiProperty({
-  type: () => Medication,
-  required: false,
-})
-medication?: Medication ;
-@ApiProperty({
   type: 'integer',
   format: 'int32',
 })
 medicationId: number ;
+@ApiProperty({
+  type: () => Medication,
+  required: false,
+})
+medication?: Medication ;
 }

@@ -12,6 +12,7 @@ import {
   Query,
   UploadedFile,
 } from '@nestjs/common';
+import { SuperCategory } from '@prisma/client';
 import { Public } from 'src/auth/public.decorator';
 import { FileUpload } from 'src/common/decorators/file-upload.decorator';
 import { IsAdmin } from 'src/common/decorators/is-admin.decorator';
@@ -21,7 +22,7 @@ import { CreateSuperCategoryDto } from './dto/create-superCategory.dto';
 import { FindSuperCategoriesDto } from './dto/find-superCategories.dto';
 import { SuperCategoryService } from './superCategory.service';
 
-@Controller('superCategory')
+@Controller('super-category')
 export class SuperCategoryController {
   constructor(private readonly superCategoryService: SuperCategoryService) {}
 
@@ -43,7 +44,7 @@ export class SuperCategoryController {
   uploadPhoto(
     @Param('id', ParseIntPipe) id: number,
     @UploadedFile() file: File,
-  ) {
+  ): Promise<SuperCategory> {
     return this.superCategoryService.uploadImage(id, file);
   }
 

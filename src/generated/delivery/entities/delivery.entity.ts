@@ -57,24 +57,31 @@ estimatedAt: Date  | null;
 })
 completedAt: Date  | null;
 @ApiProperty({
-  type: () => DeliveryOption,
-  required: false,
-  nullable: true,
-})
-deliveryOption?: DeliveryOption  | null;
-@ApiProperty({
   type: 'integer',
   format: 'int32',
   nullable: true,
 })
 deliveryOptionId: number  | null;
 @ApiProperty({
+  type: 'string',
+})
+orderId: string ;
+@ApiProperty({
+  type: () => DeliveryOption,
+  required: false,
+  nullable: true,
+})
+deliveryOption?: DeliveryOption  | null;
+@ApiProperty({
   type: () => Order,
   required: false,
 })
 order?: Order ;
+<<<<<<< HEAD
 @ApiProperty({
   type: 'string',
 })
 orderId: string ;
+=======
+>>>>>>> feature/super-category
 }

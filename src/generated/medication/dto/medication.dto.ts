@@ -15,11 +15,14 @@ id: number ;
 name: string ;
 @ApiProperty({
   type: 'string',
+<<<<<<< HEAD
   nullable: true,
 })
 urlName: string  | null;
 @ApiProperty({
   type: 'string',
+=======
+>>>>>>> feature/super-category
   nullable: true,
 })
 description: string  | null;
@@ -53,4 +56,9 @@ sellingCount: number ;
   nullable: true,
 })
 image: string  | null;
+@ApiProperty({
+  type: 'string',
+  nullable: true,
+})
+urlName: string  | null;
 }

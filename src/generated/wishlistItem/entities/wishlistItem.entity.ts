@@ -1,7 +1,7 @@
 
 import {ApiProperty} from '@nestjs/swagger'
-import {User} from '../../user/entities/user.entity'
 import {Medication} from '../../medication/entities/medication.entity'
+import {User} from '../../user/entities/user.entity'
 
 
 export class WishlistItem {
@@ -15,22 +15,29 @@ id: string ;
 })
 createdAt: Date ;
 @ApiProperty({
-  type: () => User,
-  required: false,
+  type: 'string',
 })
+<<<<<<< HEAD
 user?: User ;
 @ApiProperty({
   type: 'string',
 })
+=======
+>>>>>>> feature/super-category
 userId: string ;
+@ApiProperty({
+  type: 'integer',
+  format: 'int32',
+})
+medicationId: number ;
 @ApiProperty({
   type: () => Medication,
   required: false,
 })
 medication?: Medication ;
 @ApiProperty({
-  type: 'integer',
-  format: 'int32',
+  type: () => User,
+  required: false,
 })
-medicationId: number ;
+user?: User ;
 }

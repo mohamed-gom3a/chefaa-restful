@@ -8,8 +8,8 @@ import {IsDecimal,IsInt,IsOptional,IsString} from 'class-validator'
 
 export class UpdatePurchaseDto {
   @ApiProperty({
-  type: 'number',
-  format: 'double',
+  type: 'string',
+  format: 'Decimal.js',
   required: false,
 })
 @IsOptional()
@@ -25,6 +25,7 @@ totalPrice?: Prisma.Decimal ;
 @IsInt()
 reviewNote?: number  | null;
 @ApiProperty({
+  type: 'string',
   required: false,
   nullable: true,
 })
